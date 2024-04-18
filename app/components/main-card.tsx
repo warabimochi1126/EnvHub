@@ -1,5 +1,3 @@
-// https://flowbite.com/docs/components/card/
-
 import Link from "next/link";
 
 export default function MainCard({ text }: { text: string }) {
