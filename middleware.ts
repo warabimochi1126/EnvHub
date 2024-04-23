@@ -1,7 +1,17 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
+import { createClient } from "./lib/supabase/server";
 
 export async function middleware(request: NextRequest) {
+  const supabase = createClient();
+
+  const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
+  const accessedPath = request.nextUrl.pathname;
+
+  if (!isLoggedIn && (accessedPath === "/share/get" || accessedPath === "/share/post")) {
+    return NextResponse.redirect(`${process.env.SITE_DOMAIN}/login?redirect=${accessedPath}`);
+  }
+
   return await updateSession(request);
 }
 
