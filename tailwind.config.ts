@@ -13,6 +13,16 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        dropbox: {
+          background: "#F7F5F2",
+          hover: "#EBE9E6",
+          click: "#DFDCD8"
+        }
+      },
+      spacing: {
+        "27": "6.75rem"
+      }
     },
   },
   plugins: [],
