@@ -17,7 +17,8 @@ const config: Config = {
         dropbox: {
           background: "#F7F5F2",
           hover: "#EBE9E6",
-          click: "#DFDCD8"
+          click: "#DFDCD8",
+          border: "#BBB5AE"
         }
       },
       spacing: {
