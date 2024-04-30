@@ -22,7 +22,7 @@ export default function ShowRepositories({ repoNames }: repoNames) {
       {repoNames
       .filter(repoName => repoName.name.includes(repositorySearchStr))
       .map((repoName) => (
-        <RepoNameBlock key={repoName.id} name={repoName.name}/>
+        <RepoNameBlock key={repoName.id} name={repoName.name} repoId={repoName.id}/>
       ))}
       </div>
     </div>

@@ -6,6 +6,7 @@ export async function POST(request: Request) {
 
     const formData = await request.formData();
     const files = formData.getAll("file") as unknown as File[];
+    const repoId = formData.get("repoId");
 
     const { isError } = isEnvFiles(files);
     if (isError) {
@@ -16,10 +17,8 @@ export async function POST(request: Request) {
     }
 
 
-    // TOOD:ファイルをリポジトリと紐づけておく必要がある
-    const repoName = "test"
     for (const file of files) {
-        const { error } = await supabase.storage.from("env_bucket").upload(`${repoName}/${file.name}`, file);
+        const { error } = await supabase.storage.from("env_bucket").upload(`${repoId}/${file.name}`, file);
         if (error) {
             return Response.json({
                 isError: true, 
