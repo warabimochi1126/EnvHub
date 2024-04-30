@@ -1,7 +1,7 @@
 "use client";
 
 import { useDropzone } from "react-dropzone";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import { isEnvFiles } from "../functions/isEnvFile";
@@ -53,7 +53,6 @@ export default function DragAndDropZone({ repositoryId }: DragAndDropZoneProps) 
 
     return (
         <>
-        <ToastContainer />
             <div {...getRootProps()} className={ isDragActive ?
             "border-2 border-dotted border-red-400 flex-grow h-80 mx-10" :
             "border-2 border-dotted border-dropbox-border flex-grow h-80 mx-10"}>
