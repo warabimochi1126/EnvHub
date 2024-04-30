@@ -11,6 +11,12 @@ export const fetchLinkedEnvFileNames = async (repositoryId: string) => {
     }
   });
 
+  console.log("data:");
+  console.log(data);
+
+  console.log("error:");
+  console.log(error);
+
 
   if (error) {
     // TODO:関数の戻り値は変数1つに1つの意味を持つ方がコードが追いやすいと思うが、冗長になってしまうと思う.
@@ -21,13 +27,10 @@ export const fetchLinkedEnvFileNames = async (repositoryId: string) => {
     }
   }
 
-  const temp = new Date(data[0]?.updated_at);
-  console.log(formatDate(temp));
-
   const linkedFileData = data?.map(file => ({ 
     name: file.name,
     updatedAt: formatDate(new Date(file.updated_at))
-}));
+  }));
 
   return {
     isError: false,

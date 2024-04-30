@@ -1,9 +1,12 @@
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 import DragAndDropZone from "@/app/components/drag-and-drop-zone";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import ShowRepositories from "@/app/components/show-repositories";
 import { fetchAuthenticatedUserRepositoryNames } from "@/datas/fetchAuthUserRespositories"
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
-import { notFound } from "next/navigation";
+
 
 interface RepositoryIdPostProps {
   params: {
@@ -21,13 +24,17 @@ export default async function Post({ params }: RepositoryIdPostProps) {
 
   const { isError, errorMessage, linkedFileData } = await fetchLinkedEnvFileNames(params.repositoryId);
 
-  // TODO:notFound.tsxを実装する
+  // レスポンスのエラーをtoast表示する
   if(isError) {
-    notFound();
+    toast.error(errorMessage, {
+      theme: "colored",
+      autoClose: 2000
+    });
   }
 
   return (
   <div className="flex">
+    <ToastContainer />
     <ShowRepositories  repoNames={repoNames}/>
     <div className="flex-grow">
       <div className="mt-40"></div>
