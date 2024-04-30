@@ -18,7 +18,13 @@ export async function POST(request: Request) {
 
 
     for (const file of files) {
-        const { error } = await supabase.storage.from("env_bucket").upload(`${repoId}/${file.name}`, file);
+        const { error } = await supabase.storage.from("env_bucket").upload(`${repoId}/${file.name}`, file, {
+            upsert: true
+        });
+
+        console.log("error:");
+        console.log(error);
+
         if (error) {
             return Response.json({
                 isError: true, 
