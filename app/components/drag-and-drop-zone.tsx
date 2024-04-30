@@ -6,9 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { isEnvFiles } from "../functions/isEnvFile";
 import { fileUpload } from "../functions/fileUpload";
+import { useRouter } from "next/navigation";
 
+interface DragAndDropZoneProps {
+    repositoryId: string
+}
 
-export default function DragAndDropZone() {
+export default function DragAndDropZone({ repositoryId }: DragAndDropZoneProps) {
+    const router = useRouter();
+
     const onDrop = async (files: File[]) => {
         const { isError, messages } = isEnvFiles(files);
         
@@ -26,7 +32,7 @@ export default function DragAndDropZone() {
 
 
          // アップロード処理はバックエンド側で実装する
-         const response = await fileUpload(files);
+         const response = await fileUpload(files, repositoryId);
 
          if(response.isError) {
             return toast.error(response.message, {
@@ -37,8 +43,10 @@ export default function DragAndDropZone() {
          
          toast.success(response.message, {
             theme: "colored",
-            autoClose: 20000
+            autoClose: 2000
          });
+
+         router.refresh();
     };
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
