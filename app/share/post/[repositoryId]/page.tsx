@@ -5,6 +5,7 @@ import DragAndDropZone from "@/app/components/drag-and-drop-zone";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import RepositoryNameDisplay from "@/app/components/repository-name-display";
+import { EnvFileNotFound } from "@/app/components/envfile-notfound";
 
 
 interface RepositoryIdPostProps {
@@ -31,10 +32,13 @@ export default async function Post({ params }: RepositoryIdPostProps) {
 
   return (
     <div className="flex-grow">
-      {/* <div className="mt-40"></div> */}
       <RepositoryNameDisplay />
       <DragAndDropZone repositoryId={params.repositoryId} />
-      <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData}/>
+      { Array.isArray(linkedFileData) && linkedFileData.length !== 0 ? (
+        <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData}/>
+      ) : (
+        <EnvFileNotFound />
+      )}
     </div>
   );
 }
