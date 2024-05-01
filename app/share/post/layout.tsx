@@ -7,7 +7,6 @@ export default async function PostLayout({ children }: { children: React.ReactNo
     const repoNames = await fetchAuthenticatedUserRepositoryNames();
 
     return (
-        
         <div className="flex">
             <ToastContainer />
             <ShowRepositories repoNames={repoNames}/>
