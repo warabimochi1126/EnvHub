@@ -3,7 +3,7 @@ import { fetchAuthenticatedUserRepositoryNames } from "@/datas/fetchAuthUserResp
 import React from "react";
 import { ToastContainer } from "react-toastify";
 
-export default async function PostLayout({ children }: { children: React.ReactNode }) {
+export default async function ShareLayout({ children }: { children: React.ReactNode }) {
     const repoNames = await fetchAuthenticatedUserRepositoryNames();
 
     return (

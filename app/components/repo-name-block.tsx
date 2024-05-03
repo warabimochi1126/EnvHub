@@ -6,9 +6,10 @@ import Link from "next/link";
 interface RepoNameblockProps {
   name: string;
   repoId: number;
+  redirectTo: string;
 }
 
-export function RepoNameBlock({ name, repoId }: RepoNameblockProps) {
+export function RepoNameBlock({ name, repoId, redirectTo }: RepoNameblockProps) {
   const { selectedRepositoryName, setSelectedRepositoryName } = useStore((state) => ({
     selectedRepositoryName: state.selectedRepositoryName,
     setSelectedRepositoryName: state.setSelectedRepositoryName
@@ -17,7 +18,7 @@ export function RepoNameBlock({ name, repoId }: RepoNameblockProps) {
 
   return (
     <Link 
-      href={`/share/post/${repoId}`}
+      href={`/share/${redirectTo}/${repoId}`}
       className={selectedRepositoryName === name ? 
         "block whitespace-nowrap overflow-hidden overflow-ellipsis pl-3 p-2 hover:bg-dropbox-hover bg-dropbox-click" :
         "block whitespace-nowrap overflow-hidden overflow-ellipsis pl-3 p-2 hover:bg-dropbox-hover active:bg-dropbox-click"}
