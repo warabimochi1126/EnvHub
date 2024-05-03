@@ -1,12 +1,8 @@
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
-import DragAndDropZone from "@/app/components/drag-and-drop-zone";
-import ShowEnvFileList from "@/app/components/show-env-filelist";
-import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import RepositoryNameDisplay from "@/app/components/repository-name-display";
+import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
+import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { EnvFileNotFound } from "@/app/components/envfile-notfound";
-
 
 interface RepositoryIdPostProps {
   params: {
@@ -15,30 +11,31 @@ interface RepositoryIdPostProps {
 }
 
 type linkedFileData = {
-  name: string; 
-  updatedAt: string[]
+    name: string;
+    updatedAt: string[];
 }[]
 
-export default async function Post({ params }: RepositoryIdPostProps) {
+export default async function Get({ params }: RepositoryIdPostProps) {
   const { isError, errorMessage, linkedFileData } = await fetchLinkedEnvFileNames(params.repositoryId);
 
-  // レスポンスのエラーをtoast表示する
+    // レスポンスのエラーをtoast表示する
   if(isError) {
     toast.error(errorMessage, {
       theme: "colored",
       autoClose: 2000
     });
   }
+  
+  const hasLinkedFiledata = Array.isArray(linkedFileData) && linkedFileData.length !== 0;
 
   return (
     <div className="flex-grow">
-      <RepositoryNameDisplay />
-      <DragAndDropZone repositoryId={params.repositoryId} />
-      { Array.isArray(linkedFileData) && linkedFileData.length !== 0 ? (
+      <RepositoryNameDisplay /> 
+        { hasLinkedFiledata ? (
         <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData}/>
       ) : (
-        <EnvFileNotFound calledUrl="post" />
+        <EnvFileNotFound calledUrl="get" />
       )}
-    </div>
-  );
+      </div>
+  )
 }

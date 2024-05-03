@@ -3,6 +3,7 @@
 import RepoSearchBar from "./repo-search-bar";
 import { RepoNameBlock } from "./repo-name-block";
 import { useStore } from "@/store/repositoryGlobalState";
+import { useGetRedirectPath } from "../hooks/useGetRedirectPath";
 
 interface repoNames {
   repoNames: {
@@ -14,6 +15,8 @@ interface repoNames {
 export default function ShowRepositories({ repoNames }: repoNames) {
   const repositorySearchStr = useStore((state) => state.repositorySearchStr);
 
+  const redirectPath = useGetRedirectPath();
+  
   return (
     <div className="bg-dropbox-background h-screen w-60">
       <RepoSearchBar />
@@ -22,7 +25,7 @@ export default function ShowRepositories({ repoNames }: repoNames) {
       {repoNames
       .filter(repoName => repoName.name.includes(repositorySearchStr))
       .map((repoName) => (
-        <RepoNameBlock key={repoName.id} name={repoName.name} repoId={repoName.id}/>
+        <RepoNameBlock key={repoName.id} name={repoName.name} repoId={repoName.id} redirectTo={redirectPath}/>
       ))}
       </div>
     </div>
