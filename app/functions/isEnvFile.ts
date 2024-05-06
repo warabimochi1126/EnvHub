@@ -1,4 +1,4 @@
-import { array, z } from "zod";
+import { z } from "zod";
 
 // ファイルサイズの上限を100KBとする
 const maxFileSize = 1 * 1024 * 100;

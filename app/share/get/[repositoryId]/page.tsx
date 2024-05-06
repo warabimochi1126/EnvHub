@@ -32,7 +32,7 @@ export default async function Get({ params }: RepositoryIdPostProps) {
     <div className="flex-grow">
       <RepositoryNameDisplay /> 
         { hasLinkedFiledata ? (
-        <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData}/>
+          <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData} repositoryId={params.repositoryId} />        
       ) : (
         <EnvFileNotFound calledUrl="get" />
       )}
