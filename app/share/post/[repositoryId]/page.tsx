@@ -35,7 +35,7 @@ export default async function Post({ params }: RepositoryIdPostProps) {
       <RepositoryNameDisplay />
       <DragAndDropZone repositoryId={params.repositoryId} />
       { Array.isArray(linkedFileData) && linkedFileData.length !== 0 ? (
-        <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData} repositoryId={params.repositoryId}/>
+        <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData} repositoryId={params.repositoryId} calledUrl="post" />
       ) : (
         <EnvFileNotFound calledUrl="post" />
       )}
