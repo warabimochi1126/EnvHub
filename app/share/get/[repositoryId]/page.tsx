@@ -3,6 +3,7 @@ import RepositoryNameDisplay from "@/app/components/repository-name-display";
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { EnvFileNotFound } from "@/app/components/envfile-notfound";
+import PostGetNavigetionCard from "@/app/components/post-get-navigation";
 
 interface RepositoryIdPostProps {
   params: {
@@ -18,7 +19,7 @@ type linkedFileData = {
 export default async function Get({ params }: RepositoryIdPostProps) {
   const { isError, errorMessage, linkedFileData } = await fetchLinkedEnvFileNames(params.repositoryId);
 
-    // レスポンスのエラーをtoast表示する
+  // レスポンスのエラーをtoast表示する
   if(isError) {
     toast.error(errorMessage, {
       theme: "colored",
@@ -32,7 +33,7 @@ export default async function Get({ params }: RepositoryIdPostProps) {
     <div className="flex-grow">
       <RepositoryNameDisplay /> 
         { hasLinkedFiledata ? (
-          <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData} repositoryId={params.repositoryId} />        
+          <ShowEnvFileList linkedFileData={linkedFileData as linkedFileData} repositoryId={params.repositoryId} calledUrl="get" />
       ) : (
         <EnvFileNotFound calledUrl="get" />
       )}
