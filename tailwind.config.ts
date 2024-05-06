@@ -19,7 +19,7 @@ const config: Config = {
           hover: "#EBE9E6",
           click: "#DFDCD8",
           border: "#BBB5AE"
-        }
+        },
       },
       spacing: {
         "27": "6.75rem"
