@@ -21,4 +21,16 @@
     border-radius: 9999px;
   }
 
+  .scrollbar-filelist::-webkit-scrollbar {
+    height: 8px;
+    width: 10px;
+  }
+
+  .scrollbar-filelist::-webkit-scrollbar-thumb {
+    --tw-border-opacity: 1;
+    background-color: hsla(0,0%,89%,.8);
+    border-color: rgba(255,255,255,var(--tw-border-opacity));
+    border-radius: 9999px;
+    border-width: 1px;
+  }
 }
