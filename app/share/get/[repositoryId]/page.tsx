@@ -3,7 +3,6 @@ import RepositoryNameDisplay from "@/app/components/repository-name-display";
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { EnvFileNotFound } from "@/app/components/envfile-notfound";
-import PostGetNavigetionCard from "@/app/components/post-get-navigation";
 
 interface RepositoryIdPostProps {
   params: {
