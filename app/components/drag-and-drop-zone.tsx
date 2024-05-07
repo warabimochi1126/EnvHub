@@ -2,11 +2,10 @@
 
 import { useDropzone } from "react-dropzone";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
 
 import { isEnvFiles } from "../functions/isEnvFile";
 import { fileUpload } from "../functions/fileUpload";
-import { useRouter } from "next/navigation";
 
 interface DragAndDropZoneProps {
     repositoryId: string
