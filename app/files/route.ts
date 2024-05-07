@@ -1,6 +1,65 @@
+import { z } from "zod";
+import { NextRequest } from "next/server";
+
 import { createClient } from "@/lib/supabase/server";
 import { isEnvFiles } from "../functions/isEnvFile";
+import { redirect } from "next/navigation";
 
+const fileDownloadSchema = z.object({
+    repositoryId: z.string().min(1, { message: "repository_idは必須です。" }),
+    fileName: z.string().startsWith(".env", { message: "ファイル名は.envで始まっている必要があります。"})
+});
+
+// ダウンロード側   
+export async function GET(request: NextRequest) {
+    const supabase = createClient();
+
+    console.log("エンドポイント発火確認");
+
+    const searchParams = request.nextUrl.searchParams;
+    const repositoryId = searchParams.get("repository_id") ?? "";
+    const fileName = searchParams.get("file_name") ?? "";
+
+    console.log("repositoryId:", repositoryId);
+    console.log("fileName:", fileName);
+    
+    const parsedObj = fileDownloadSchema.safeParse({
+        repositoryId,
+        fileName
+    });
+
+    if(!parsedObj.success) {
+        const fieldErrors = parsedObj.error.flatten().fieldErrors;
+        const errorsArray = Object.values(fieldErrors).flat() as string[];
+
+        return Response.json({
+            isError: true,
+            messages: errorsArray
+        });
+    }
+
+    const { data, error } = await supabase.storage.from("env_bucket").createSignedUrl(`${repositoryId}/${fileName}`, 10);
+
+    if (error) {
+        console.log(error);
+        return Response.json({
+            isError: true,
+            messages: ["ファイルダウンロード時に何らかのエラーが発生しました。"]
+        })
+    }
+
+    if (data) {
+        redirect(data.signedUrl);
+    }
+
+    return Response.json({
+        isError: true,
+        messages: ["何らかの理由でファイルダウンロードに失敗しました。"]
+    })
+}
+
+
+// アップロード側
 export async function POST(request: Request) {
     const supabase = createClient();
 
