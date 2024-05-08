@@ -1,17 +1,18 @@
-import ShowRepositories from "@/app/components/show-repositories";
-import { fetchAuthenticatedUserRepositoryNames } from "@/datas/fetchAuthUserRespositories";
-import React from "react";
+import React, { Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import ShowRepositoriesWrapper from "../components/show-repositories-wrapper";
+import ShowRepositoriesFallback from "../components/show-repositories-fallback";
 
 
 export default async function ShareLayout({ children }: { children: React.ReactNode }) {
-    const repoNames = await fetchAuthenticatedUserRepositoryNames();
 
     return (
         <div className="flex">
             <ToastContainer />
-            <ShowRepositories repoNames={repoNames}/>
+            <Suspense fallback={<ShowRepositoriesFallback />}>
+                <ShowRepositoriesWrapper />
+            </Suspense>
             { children }
         </div>
     )
