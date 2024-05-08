@@ -41,7 +41,6 @@ export async function GET(request: NextRequest) {
     const { data, error } = await supabase.storage.from("env_bucket").createSignedUrl(`${repositoryId}/${fileName}`, 10);
 
     if (error) {
-        console.log(error);
         return Response.json({
             isError: true,
             messages: ["ファイルダウンロード時に何らかのエラーが発生しました。"]

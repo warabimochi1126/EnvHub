@@ -4,6 +4,7 @@ import Image from "next/image"
 
 import fileIcon from "@/public/file-icon.svg"
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface EnvFileImgProps {
   repositoryId: string;
@@ -16,6 +17,8 @@ interface ResponseJson {
 }
 
 export function EnvFileImg({ repositoryId, fileName }: EnvFileImgProps) {
+  const router = useRouter();
+
   const fileDownload = async () => {
     toast.info("ダウンロード処理を実行中です。", {
       theme: "colored",
@@ -29,6 +32,7 @@ export function EnvFileImg({ repositoryId, fileName }: EnvFileImgProps) {
         theme: "colored",
         autoClose: 2000
       });
+      router.push(response.url);
     } else {
       const { messages }: ResponseJson = await response.json();
       messages.forEach(message => toast.error(message, {
