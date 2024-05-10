@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isEnvFiles } from "../functions/isEnvFile";
 import { redirect } from "next/navigation";
 
-const fileDownloadSchema = z.object({
+const fileSchema = z.object({
     repositoryId: z.string().min(1, { message: "repository_idは必須です。" }),
     fileName: z.string().startsWith(".env", { message: "ファイル名は.envで始まっている必要があります。"})
 });
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     console.log("repositoryId:", repositoryId);
     console.log("fileName:", fileName);
     
-    const parsedObj = fileDownloadSchema.safeParse({
+    const parsedObj = fileSchema.safeParse({
         repositoryId,
         fileName
     });
@@ -93,5 +93,42 @@ export async function POST(request: Request) {
     return Response.json({
         isError: false,
         message: "アップロードが成功しました！" 
+    });
+}
+
+// 削除側
+export async function DELETE(request: NextRequest) {
+    const supabase = createClient();
+
+    const searchParams = request.nextUrl.searchParams;
+    const repositoryId = searchParams.get("repository_id") ?? "";
+    const fileName = searchParams.get("file_name") ?? "";
+
+    const parsedObj = fileSchema.safeParse({
+        repositoryId,
+        fileName
+    });
+
+    if(!parsedObj.success) {
+        const fieldErrors = parsedObj.error.flatten().fieldErrors;
+        const errorsArray = Object.values(fieldErrors).flat() as string[];
+
+        return Response.json({
+            isError: true,
+            messages: errorsArray
+        });
+    }
+    
+    const { data, error } = await supabase.storage.from("env_bucket").remove([`${repositoryId}/${fileName}`]);
+
+    if (error) {
+        return Response.json({
+            isError: true,
+            message: ["ファイルダウンロード時に何らかのエラーが発生しました。"]
+        })
+    }
+
+    return Response.json({
+        data: data
     });
 }
