@@ -124,11 +124,20 @@ export async function DELETE(request: NextRequest) {
     if (error) {
         return Response.json({
             isError: true,
-            message: ["ファイルダウンロード時に何らかのエラーが発生しました。"]
+            messages: ["ファイル削除時に何らかのエラーが発生しました。"]
         })
     }
 
+    // ファイル削除できなかった場合
+    if (data.length === 0) {
+        return Response.json({
+            isError: true,
+            messages: ["ファイル削除に失敗しました。"]
+        });
+    }
+
     return Response.json({
-        data: data
+        isError: false,
+        messages: ["ファイル削除に成功しました。"]
     });
 }
