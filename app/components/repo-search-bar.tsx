@@ -11,7 +11,6 @@ export default function RepoSearchBar() {
   }));
 
   const inputCallback = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(repositorySearchStr);
     setRepoSearchStr(e.target.value);
   };
 

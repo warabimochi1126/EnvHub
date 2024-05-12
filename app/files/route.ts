@@ -14,14 +14,9 @@ const fileSchema = z.object({
 export async function GET(request: NextRequest) {
     const supabase = createClient();
 
-    console.log("エンドポイント発火確認");
-
     const searchParams = request.nextUrl.searchParams;
     const repositoryId = searchParams.get("repository_id") ?? "";
     const fileName = searchParams.get("file_name") ?? "";
-
-    console.log("repositoryId:", repositoryId);
-    console.log("fileName:", fileName);
     
     const parsedObj = fileSchema.safeParse({
         repositoryId,
@@ -78,9 +73,6 @@ export async function POST(request: Request) {
         const { error } = await supabase.storage.from("env_bucket").upload(`${repoId}/${file.name}`, file, {
             upsert: true
         });
-
-        console.log("error:");
-        console.log(error);
 
         if (error) {
             return Response.json({
