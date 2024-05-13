@@ -1,8 +1,8 @@
-import { toast } from "react-toastify";
 import RepositoryNameDisplay from "@/app/components/repository-name-display";
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { EnvFileNotFound } from "@/app/components/envfile-notfound";
+import DataFetchErrorView from "@/app/components/data-fetch-error-view";
 
 interface RepositoryIdPostProps {
   params: {
@@ -18,13 +18,10 @@ type linkedFileData = {
 export default async function Get({ params }: RepositoryIdPostProps) {
   const { isError, errorMessage, linkedFileData } = await fetchLinkedEnvFileNames(params.repositoryId);
 
-  // レスポンスのエラーをtoast表示する
-  if(isError) {
-    toast.error(errorMessage, {
-      theme: "colored",
-      autoClose: 2000
-    });
+  if(isError && errorMessage) {
+    return <DataFetchErrorView errorMessage={ errorMessage } />
   }
+
   
   const hasLinkedFiledata = Array.isArray(linkedFileData) && linkedFileData.length !== 0;
 
