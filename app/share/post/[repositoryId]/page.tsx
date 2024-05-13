@@ -1,11 +1,9 @@
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
 import DragAndDropZone from "@/app/components/drag-and-drop-zone";
 import ShowEnvFileList from "@/app/components/show-env-filelist";
 import { fetchLinkedEnvFileNames } from "@/datas/fetchLinkedFileNames";
 import RepositoryNameDisplay from "@/app/components/repository-name-display";
 import { EnvFileNotFound } from "@/app/components/envfile-notfound";
+import DataFetchErrorView from "@/app/components/data-fetch-error-view";
 
 
 interface RepositoryIdPostProps {
@@ -22,12 +20,8 @@ type linkedFileData = {
 export default async function Post({ params }: RepositoryIdPostProps) {
   const { isError, errorMessage, linkedFileData } = await fetchLinkedEnvFileNames(params.repositoryId);
 
-  // レスポンスのエラーをtoast表示する
-  if(isError) {
-    toast.error(errorMessage, {
-      theme: "colored",
-      autoClose: 2000
-    });
+  if(isError && errorMessage) {
+    return <DataFetchErrorView errorMessage={ errorMessage } />
   }
 
   return (
