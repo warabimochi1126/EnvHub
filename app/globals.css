@@ -2,16 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* スクロールバーの変更 */
 @layer utilities {
   .scrollbar::-webkit-scrollbar {
     height: 1rem;
-    width: .5rem;
+    width: 0.5rem;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
     --tw-border-opacity: 1;
-    background-color: hsla(0,0%,89%,.8);
-    border-color: rgba(255,255,255,var(--tw-border-opacity));
+    background-color: hsla(0, 0%, 89%, 0.8);
+    border-color: rgba(255, 255, 255, var(--tw-border-opacity));
     border-radius: 9999px;
     border-width: 1px;
   }
@@ -28,9 +29,22 @@
 
   .scrollbar-filelist::-webkit-scrollbar-thumb {
     --tw-border-opacity: 1;
-    background-color: hsla(0,0%,89%,.8);
-    border-color: rgba(255,255,255,var(--tw-border-opacity));
+    background-color: hsla(0, 0%, 89%, 0.8);
+    border-color: rgba(255, 255, 255, var(--tw-border-opacity));
     border-radius: 9999px;
     border-width: 1px;
   }
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 100ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
 }
