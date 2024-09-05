@@ -5,7 +5,7 @@ import { DisclaimerButton } from "../elements/disclaimer-button";
 
 export function MainArea() {
   return (
-    <div className="py-28">
+    <div className="pt-28">
       <div className="container mx-auto text-center">
         <h1 className="text-7xl font-bold">EnvHub</h1>
         <p className="text-gray-500 mt-3 text-xl">

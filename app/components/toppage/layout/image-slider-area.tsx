@@ -12,13 +12,13 @@ const splideOptions = {
   autoplay: true,
   rewind: true,
   speed: 1000,
-  interval: 5000,
+  interval: 2000,
 };
 
 export function ImageSliderArea() {
   return (
     <div className="flex-1">
-      <Splide className="h-full" hasTrack={false} options={splideOptions}>
+      <Splide className="h-full py-14" hasTrack={false} options={splideOptions}>
         <SplideTrack className="h-full">
           <SplideSlide>
             <ImageInSlider ImageSrc={EnvHubImage1} />
@@ -43,7 +43,7 @@ function ImageInSlider({ ImageSrc }: ImageInSliderProps) {
         src={ImageSrc}
         alt="EnvHubのスクリーンショット"
         fill
-        className="object-contain"
+        className="object-contain border border-gray-300"
       />
     </div>
   );
