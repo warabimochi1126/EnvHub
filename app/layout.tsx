@@ -21,9 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Link href="/">
+      {/* <Link href="/">
         <Image src="/top-icon.png" alt="アイコン" width={50} height={50} className="absolute top-5 left-5" />
-      </Link>
+      </Link> */}
       {children}
       </body>
     </html>
