@@ -1,13 +1,10 @@
 // import { Disclaimer } from "./components/disclaimer";
 // import MainCard from "./components/main-card";
 
-import Image from "next/image";
 import { Footer } from "./components/toppage/layout/footer";
 import { Header } from "./components/toppage/layout/header";
 import { ImageSliderArea } from "./components/toppage/layout/image-slider-area";
 import { MainArea } from "./components/toppage/layout/main-area";
-
-import EnvHubImage1 from "@/public/envhub_1.png";
 
 // export default function Home() {
 //   return (

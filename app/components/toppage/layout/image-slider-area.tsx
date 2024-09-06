@@ -6,9 +6,11 @@ import { Splide, SplideSlide, SplideTrack } from "react-splide-ts";
 import EnvHubImage1 from "@/public/envhub_1.png";
 import EnvHubImage2 from "@/public/envhub_2.png";
 
-import "react-splide-ts/css";
+import "react-splide-ts/css/sea-green";
 
 const splideOptions = {
+  type: "loop",
+  arrows: false,
   autoplay: true,
   rewind: true,
   speed: 1000,
@@ -27,6 +29,9 @@ export function ImageSliderArea() {
             <ImageInSlider ImageSrc={EnvHubImage2} />
           </SplideSlide>
         </SplideTrack>
+        <div className="splide__progress">
+          <div className="splide__progress__bar"></div>
+        </div>
       </Splide>
     </div>
   );
@@ -43,7 +48,7 @@ function ImageInSlider({ ImageSrc }: ImageInSliderProps) {
         src={ImageSrc}
         alt="EnvHubのスクリーンショット"
         fill
-        className="object-contain border border-gray-300"
+        className="object-contain"
       />
     </div>
   );
