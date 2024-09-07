@@ -1,6 +1,7 @@
 name: Task Ticket
 description: タスクに関するIssueはこちら
-labels: ["task", "test"]
+labels: ["task"]
+projects: ["EnvHub/5"]
 body:
   - type: textarea
     id: goal
