@@ -1,7 +1,7 @@
 name: Task Ticket
 description: タスクに関するIssueはこちら
 labels: ["task"]
-projects: ["EnvHub/5"]
+projects: ["warabimochi1126/5"]
 body:
   - type: textarea
     id: goal
