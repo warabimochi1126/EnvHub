@@ -1,7 +1,8 @@
 "use client";
 
-import Image, { StaticImageData } from "next/image";
 import { Splide, SplideSlide, SplideTrack } from "react-splide-ts";
+import { SplideProgressBar } from "../elements/splide-progress-bar";
+import { ImageInSlider } from "../elements/image-in-slider";
 
 import EnvHubImage1 from "@/public/envhub_1.png";
 import EnvHubImage2 from "@/public/envhub_2.png";
@@ -29,27 +30,8 @@ export function ImageSliderArea() {
             <ImageInSlider ImageSrc={EnvHubImage2} />
           </SplideSlide>
         </SplideTrack>
-        <div className="splide__progress">
-          <div className="splide__progress__bar"></div>
-        </div>
+        <SplideProgressBar />
       </Splide>
-    </div>
-  );
-}
-
-interface ImageInSliderProps {
-  ImageSrc: StaticImageData;
-}
-
-function ImageInSlider({ ImageSrc }: ImageInSliderProps) {
-  return (
-    <div className="relative h-full">
-      <Image
-        src={ImageSrc}
-        alt="EnvHubのスクリーンショット"
-        fill
-        className="object-contain"
-      />
     </div>
   );
 }
