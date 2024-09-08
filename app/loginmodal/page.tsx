@@ -49,6 +49,10 @@ export default function LoginModal() {
   );
 }
 
+// TODO:下のコンポーネントをファイルで分けるかどうか迷っている
+// 分けるメリット:1ファイル1コンポーネントが守られていて、心理的に見やすい
+// 分けるデメリット:elementsの中にlayoutから直接参照されていないファイルが出来てしまう、ディレクトリ構造としてはパッと見で分かりずらい
+
 interface InModalContent {
   modalCloseFunc: () => void;
 }
