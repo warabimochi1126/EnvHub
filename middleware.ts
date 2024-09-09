@@ -8,10 +8,16 @@ export async function middleware(request: NextRequest) {
   const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
   const accessedPath = request.nextUrl.pathname;
 
-  if (!isLoggedIn && (accessedPath.startsWith("/share/get") || accessedPath.startsWith("/share/post"))) {
+  if (
+    !isLoggedIn &&
+    (accessedPath.startsWith("/share/get") ||
+      accessedPath.startsWith("/share/post"))
+  ) {
     // 時間経過によるprovider_tokenの失効を永続化させる
     await updateSession(request);
-    return NextResponse.redirect(`${process.env.SITE_DOMAIN}/login?redirect=${accessedPath}`);
+    return NextResponse.redirect(
+      `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/login?redirect=${accessedPath}`
+    );
   }
 
   return await updateSession(request);

@@ -5,7 +5,7 @@ import { MainArea } from "./components/toppage/layout/main-area";
 
 export default function Home() {
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col modal">
       <Header />
       <MainArea />
       <ImageSliderArea />

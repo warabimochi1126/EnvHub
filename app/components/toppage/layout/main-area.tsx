@@ -1,3 +1,5 @@
+"use client";
+
 import { MainAreaButton } from "../elements/main-area-button";
 import { FiUpload } from "react-icons/fi";
 import { FiDownload } from "react-icons/fi";
@@ -14,13 +16,13 @@ export function MainArea() {
 
         <div className="flex justify-center space-x-12 mt-6">
           <MainAreaButton
-            href={`${process.env.SITE_DOMAIN}/share/post`}
+            href={`${process.env.NEXT_PUBLIC_SITE_DOMAIN}/share/post`}
             theme="blue"
             Icon={FiUpload}
             text="Share.env"
           />
           <MainAreaButton
-            href={`${process.env.SITE_DOMAIN}/share/get`}
+            href={`${process.env.NEXT_PUBLIC_SITE_DOMAIN}/share/get`}
             theme="gray"
             Icon={FiDownload}
             text="Get.env"
