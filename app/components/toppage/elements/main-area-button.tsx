@@ -6,7 +6,8 @@ import { FiGithub } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { IoLogoGithub } from "react-icons/io5";
 import Modal from "react-modal";
-import { ClipLoader, FadeLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
+import { githubSignIn } from "@/actions/auth";
 
 Modal.setAppElement(".modal");
 
@@ -87,7 +88,7 @@ export function MainAreaButton({
         style={modalStyle}
         onRequestClose={modalClose}
       >
-        <InModalContent modalCloseFunc={modalClose} />
+        <InModalContent modalCloseFunc={modalClose} redirectUrl={href} />
       </Modal>
     </>
   );
@@ -95,12 +96,24 @@ export function MainAreaButton({
 
 interface InModalContentProps {
   modalCloseFunc: () => void;
+  redirectUrl: string;
 }
 
-export function InModalContent({ modalCloseFunc }: InModalContentProps) {
+export function InModalContent({
+  modalCloseFunc,
+  redirectUrl,
+}: InModalContentProps) {
   // TODO:ログインボタン押下時にログイン処理を走らせる
   // 元々のログイン機能を探る必要がありそう
-  const githubLogin = async () => {};
+  const githubSignInWithRedirectUrl = githubSignIn.bind(null, redirectUrl);
+
+  const [isLoginButtonClicked, setIsLoginButtonClicked] =
+    useState<boolean>(false);
+
+  const handleGithubLoginButton = async () => {
+    setIsLoginButtonClicked(true);
+    githubSignInWithRedirectUrl();
+  };
 
   return (
     <>
@@ -121,9 +134,15 @@ export function InModalContent({ modalCloseFunc }: InModalContentProps) {
         </div>
       </div>
       <hr className="h-2 mt-2" />
-      <button className="w-full mt-1 flex justify-center items-center bg-gray-900 rounded-lg text-white py-2 transition-colors duration-300 hover:bg-gray-800 hover:shadow-md">
+      <button
+        className="w-full mt-1 flex justify-center items-center bg-gray-900 rounded-lg text-white py-2 transition-colors duration-300 hover:bg-gray-800 hover:shadow-md"
+        onClick={() => handleGithubLoginButton()}
+      >
         <IoLogoGithub className="mr-2" size={20} />
-        <span>GitHubでログイン</span>
+        <span className="mr-1">GitHubでログイン</span>
+        {isLoginButtonClicked && (
+          <ClipLoader size={16} color="white" speedMultiplier={0.5} />
+        )}
       </button>
     </>
   );
