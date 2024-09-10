@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { IconType } from "react-icons";
-import { FiGithub } from "react-icons/fi";
-import { IoMdClose } from "react-icons/io";
-import { IoLogoGithub } from "react-icons/io5";
 import Modal from "react-modal";
 import { ClipLoader } from "react-spinners";
-import { githubSignIn } from "@/actions/auth";
+import { useModal } from "@/app/hooks/toppage/useModal";
+import { MainInModalContent } from "./inmodal/main-in-modal-content";
 
 Modal.setAppElement(".modal");
 
@@ -43,10 +41,7 @@ export function MainAreaButton({
   Icon,
   text,
 }: MainAreaButtonProps) {
-  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-  const modalOpen = () => setIsOpen(true);
-  const modalClose = () => setIsOpen(false);
-
+  const { isModalOpen, modalOpen, modalClose } = useModal();
   const [clickedButtonText, setClickedButtonText] = useState<string>();
 
   const bgColor =
@@ -74,7 +69,7 @@ export function MainAreaButton({
   return (
     <>
       <div
-        className={`${bgColor} py-2 px-10 rounded-md flex w-fit items-center text-sm transition-colors duration-300`}
+        className={`${bgColor} py-2 px-10 rounded-md flex w-fit items-center text-sm`}
         onClick={() => handleButtonClick(text)}
       >
         <Icon size={20} className="mr-2" />
@@ -84,66 +79,12 @@ export function MainAreaButton({
         )}
       </div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={isModalOpen}
         style={modalStyle}
         onRequestClose={modalClose}
       >
-        <InModalContent modalCloseFunc={modalClose} redirectUrl={href} />
+        <MainInModalContent modalCloseFunc={modalClose} redirectUrl={href} />
       </Modal>
-    </>
-  );
-}
-
-interface InModalContentProps {
-  modalCloseFunc: () => void;
-  redirectUrl: string;
-}
-
-export function InModalContent({
-  modalCloseFunc,
-  redirectUrl,
-}: InModalContentProps) {
-  // TODO:ログインボタン押下時にログイン処理を走らせる
-  // 元々のログイン機能を探る必要がありそう
-  const githubSignInWithRedirectUrl = githubSignIn.bind(null, redirectUrl);
-
-  const [isLoginButtonClicked, setIsLoginButtonClicked] =
-    useState<boolean>(false);
-
-  const handleGithubLoginButton = async () => {
-    setIsLoginButtonClicked(true);
-    githubSignInWithRedirectUrl();
-  };
-
-  return (
-    <>
-      <div className="flex justify-between">
-        <div className="flex items-center">
-          <FiGithub size={22} className="mr-1" />
-          <span className="text-lg font-bold">GitHub Login</span>
-        </div>
-        <IoMdClose
-          size={34}
-          onClick={modalCloseFunc}
-          className="cursor-pointer rounded-full hover:bg-gray-200 p-1.5 transition-colors duration-200 relative -top-3 left-3"
-        />
-      </div>
-      <div>
-        <div className="text-gray-500 mt-2">
-          <p>EnvHubの利用にはGitHubアカウントでのログインが必要です。</p>
-        </div>
-      </div>
-      <hr className="h-2 mt-2" />
-      <button
-        className="w-full mt-1 flex justify-center items-center bg-gray-900 rounded-lg text-white py-2 transition-colors duration-300 hover:bg-gray-800 hover:shadow-md"
-        onClick={() => handleGithubLoginButton()}
-      >
-        <IoLogoGithub className="mr-2" size={20} />
-        <span className="mr-1">GitHubでログイン</span>
-        {isLoginButtonClicked && (
-          <ClipLoader size={16} color="white" speedMultiplier={0.5} />
-        )}
-      </button>
     </>
   );
 }
