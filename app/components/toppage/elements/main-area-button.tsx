@@ -74,7 +74,7 @@ export function MainAreaButton({
   return (
     <>
       <div
-        className={`${bgColor} py-2 px-10 rounded-md flex w-fit items-center text-sm`}
+        className={`${bgColor} py-2 px-10 rounded-md flex w-fit items-center text-sm transition-colors duration-300`}
         onClick={() => handleButtonClick(text)}
       >
         <Icon size={20} className="mr-2" />
