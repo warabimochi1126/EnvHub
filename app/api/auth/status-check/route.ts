@@ -7,11 +7,13 @@ export async function POST(request: NextRequest) {
 
   const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
 
+  const accessOrigin = request.nextUrl.origin;
+  // TODO:エラーハンドリングリファクタリングしたい
   if (isLoggedIn) {
-    let redirectUrl;
+    let redirectPath;
     try {
-      redirectUrl = await request.json();
-    } catch {
+      redirectPath = await request.json();
+    } catch (e: any) {
       return NextResponse.json(
         {
           message:
@@ -21,10 +23,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (redirectUrl) {
+    if (redirectPath) {
       try {
-        return NextResponse.redirect(redirectUrl);
-      } catch {
+        // return NextResponse.redirect(new URL(redirectPath, accessOrigin));
+        return NextResponse.json(
+          {
+            redirectUrl: new URL(redirectPath, accessOrigin),
+          },
+          { status: 200 }
+        );
+      } catch (e: any) {
         return NextResponse.json(
           {
             message: "正しいリダイレクト先を指定してください。",
