@@ -4,11 +4,11 @@ import { IoLogoGithub } from "react-icons/io";
 import { ClipLoader } from "react-spinners";
 
 interface GitHubLoginButtonProps {
-  redirectUrl: string;
+  redirectPath: string;
 }
 
-export function GitHubLoginButton({ redirectUrl }: GitHubLoginButtonProps) {
-  const githubSignInWithRedirectUrl = githubSignIn.bind(null, redirectUrl);
+export function GitHubLoginButton({ redirectPath }: GitHubLoginButtonProps) {
+  const githubSignInWithRedirectUrl = githubSignIn.bind(null, redirectPath);
 
   const [isLoginButtonClicked, setIsLoginButtonClicked] =
     useState<boolean>(false);

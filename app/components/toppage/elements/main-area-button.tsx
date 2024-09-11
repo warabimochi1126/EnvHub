@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import { ClipLoader } from "react-spinners";
 import { useModal } from "@/app/hooks/toppage/useModal";
 import { MainInModalContent } from "./inmodal/main-in-modal-content";
+import { useRouter } from "next/navigation";
 
 Modal.setAppElement(".modal");
 
@@ -29,20 +30,22 @@ const modalStyle = {
 };
 
 interface MainAreaButtonProps {
-  href: string;
+  redirectPath: string;
   theme: "blue" | "gray";
   Icon: IconType;
   text: string;
 }
 
 export function MainAreaButton({
-  href,
+  redirectPath,
   theme,
   Icon,
   text,
 }: MainAreaButtonProps) {
   const { isModalOpen, modalOpen, modalClose } = useModal();
   const [clickedButtonText, setClickedButtonText] = useState<string>();
+  // TODO:useRouterを使わない方法がないか再考する
+  const router = useRouter();
 
   const bgColor =
     theme === "blue"
@@ -54,13 +57,14 @@ export function MainAreaButton({
 
     const response = await fetch("/api/auth/status-check", {
       method: "POST",
-      body: href,
+      body: JSON.stringify(redirectPath),
     });
-
-    console.log(await response.json());
 
     if (!response.ok) {
       modalOpen();
+    } else {
+      const { redirectUrl } = await response.json();
+      router.push(redirectUrl);
     }
 
     setClickedButtonText(undefined);
@@ -83,7 +87,10 @@ export function MainAreaButton({
         style={modalStyle}
         onRequestClose={modalClose}
       >
-        <MainInModalContent modalCloseFunc={modalClose} redirectUrl={href} />
+        <MainInModalContent
+          modalCloseFunc={modalClose}
+          redirectPath={redirectPath}
+        />
       </Modal>
     </>
   );

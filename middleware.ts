@@ -15,9 +15,8 @@ export async function middleware(request: NextRequest) {
   ) {
     // 時間経過によるprovider_tokenの失効を永続化させる
     await updateSession(request);
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/login?redirect=${accessedPath}`
-    );
+
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return await updateSession(request);

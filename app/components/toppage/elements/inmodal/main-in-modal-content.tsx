@@ -4,19 +4,19 @@ import { ModalHeader } from "./main/modal-header";
 
 interface InModalContentProps {
   modalCloseFunc: () => void;
-  redirectUrl: string;
+  redirectPath: string;
 }
 
 export function MainInModalContent({
   modalCloseFunc,
-  redirectUrl,
+  redirectPath,
 }: InModalContentProps) {
   return (
     <>
       <ModalHeader modalCloseFunc={modalCloseFunc} />
       <ModalContent />
       <hr className="h-2 mt-2" />
-      <GitHubLoginButton redirectUrl={redirectUrl} />
+      <GitHubLoginButton redirectPath={redirectPath} />
     </>
   );
 }
