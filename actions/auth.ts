@@ -11,7 +11,7 @@ export const githubSignIn = async (redirectPath: string) => {
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      scopes: "repo",
+      scopes: "repo read:org",
       redirectTo: `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/auth/callback?next=${redirectPath}`,
     },
   });
