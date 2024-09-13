@@ -35,13 +35,12 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   return fetchrepositoriesDataNames;
 }
 
-export async function fetchAuthUserOrgsNames(providerToken: string) {
+async function fetchAuthUserOrgsNames(providerToken: string) {
   // TODO:権限がなくてデータ取れてきてないっぽいのでトークン周り洗い出す
   // 多分 read:org が足りてなさそう
 
-  const perPage = 100;
   const response = await fetch(
-    `https://api.github.com/user/orgs?per_page=${perPage}`,
+    "https://api.github.com/user/orgs?per_page=100",
     {
       headers: {
         Authorization: `Bearer ${providerToken}`,
@@ -58,4 +57,29 @@ export async function fetchAuthUserOrgsNames(providerToken: string) {
   }));
 
   return fetchOrgsNames;
+}
+
+async function fetchAuthUserOrgsRepoNames(
+  orgNames: string[],
+  providerToken: string
+) {
+  const temp = orgNames.map(async (orgName) => {
+    const response = await fetch(
+      `https://api.github.com/orgs/${orgName}/repos?sort=updated&per_page=100`,
+      {
+        headers: {
+          Authorization: `Bearer ${providerToken}`,
+        },
+        cache: "no-store",
+      }
+    );
+
+    const fetchOrgsRepoData: RestEndpointMethodTypes["repos"]["listForOrg"]["response"] =
+      await response.json();
+    const fetchOrgsRepoNames = fetchOrgsRepoData.data.map((data) => ({
+      repoName: data.full_name,
+    }));
+
+    return fetchOrgsRepoNames;
+  });
 }
