@@ -1,0 +1,139 @@
+"use client";
+import { useState } from "react";
+import { IconType } from "react-icons";
+import { FaUser } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
+
+// TODO:コンポーネント分割・カスタムフックスの作成
+export default function Page() {
+  const [isPersonalClicked, setIsPersonalClicked] = useState<boolean>(true);
+  const clickPersonal = () => setIsPersonalClicked(true);
+  const clickOrganizations = () => setIsPersonalClicked(false);
+
+  return (
+    <div className="flex">
+      <div className="w-1/4 bg-white h-screen">
+        {/* <div className="w-11/12 bg-gray-100 mx-auto p-1 rounded-sm">
+          <div className="flex">
+            <div
+              className={`w-1/2 text-center py-2 ${
+                isPersonalClicked && "bg-white"
+              }`}
+              onClick={clickPersonal}
+            >
+              <div className="flex items-center justify-center rounded">
+                <FaUser className="mr-2" />
+                <span className="text-sm text-gray-500">個人</span>
+              </div>
+            </div>
+            <div
+              className={`w-1/2 text-center rounded py-2 ${
+                !isPersonalClicked && "bg-white"
+              }`}
+              onClick={clickOrganizations}
+            >
+              <div className="flex items-center justify-center">
+                <FaUsers className="mr-2" />
+                <span className="text-sm text-gray-500">組織</span>
+              </div>
+            </div>
+          </div>
+        </div> */}
+        <RepositoryTypeSelctor
+          isPersonalClicked={isPersonalClicked}
+          clickPersonal={clickPersonal}
+          clickOrganizations={clickOrganizations}
+        />
+      </div>
+      <div className="w-3/4 bg-[#F3F4F6]">
+        <span>aaa</span>
+      </div>
+    </div>
+  );
+}
+
+interface RepositoryTypeSelctorProps {
+  isPersonalClicked: boolean;
+  clickPersonal: () => void;
+  clickOrganizations: () => void;
+}
+
+export function RepositoryTypeSelctor({
+  isPersonalClicked,
+  clickPersonal,
+  clickOrganizations,
+}: RepositoryTypeSelctorProps) {
+  return (
+    <div className="w-11/12 bg-gray-100 mx-auto p-1 rounded-sm flex">
+      <PersonalRepositoryTypeButton
+        isPersonalClicked={isPersonalClicked}
+        clickPersonal={clickPersonal}
+        DrawingIcon={FaUser}
+        repositoryTypeText="個人"
+      />
+      <OrganizationsRepositoryTypeButton
+        isPersonalClicked={isPersonalClicked}
+        clickOrganizations={clickOrganizations}
+        DrawingIcon={FaUsers}
+        repositoryTypeText="組織"
+      />
+    </div>
+  );
+}
+
+// TODO:共通化する
+interface RepositoryTypeButtonProps {
+  isPersonalClicked: boolean;
+  clickPersonal: () => void;
+  clickOrganizations: () => void;
+  DrawingIcon: IconType;
+  repositoryTypeText: string;
+}
+
+type PersonalRepositoryTypeButtonProps = Omit<
+  RepositoryTypeButtonProps,
+  "clickOrganizations"
+>;
+
+export function PersonalRepositoryTypeButton({
+  isPersonalClicked,
+  clickPersonal,
+  DrawingIcon,
+  repositoryTypeText,
+}: PersonalRepositoryTypeButtonProps) {
+  return (
+    <div
+      className={`w-1/2 py-2 flex items-center justify-center rounded ${
+        isPersonalClicked && "bg-white"
+      }`}
+      onClick={clickPersonal}
+    >
+      <DrawingIcon className="mr-2" />
+      <span className="text-sm text-gray-500">{repositoryTypeText}</span>
+    </div>
+  );
+}
+
+type OrganizationsRepositoryTypeButtonProps = Omit<
+  RepositoryTypeButtonProps,
+  "clickPersonal"
+>;
+
+export function OrganizationsRepositoryTypeButton({
+  isPersonalClicked,
+  clickOrganizations,
+  DrawingIcon,
+  repositoryTypeText,
+}: OrganizationsRepositoryTypeButtonProps) {
+  return (
+    <div
+      className={`w-1/2 py-2 flex items-center justify-center rounded  ${
+        !isPersonalClicked && "bg-white"
+      }`}
+      onClick={clickOrganizations}
+    >
+      <DrawingIcon className="mr-2" />
+      <span className="text-sm text-gray-500">{repositoryTypeText}</span>
+    </div>
+  );
+}
