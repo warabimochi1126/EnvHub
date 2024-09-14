@@ -13,32 +13,6 @@ export default function Page() {
   return (
     <div className="flex">
       <div className="w-1/4 bg-white h-screen">
-        {/* <div className="w-11/12 bg-gray-100 mx-auto p-1 rounded-sm">
-          <div className="flex">
-            <div
-              className={`w-1/2 text-center py-2 ${
-                isPersonalClicked && "bg-white"
-              }`}
-              onClick={clickPersonal}
-            >
-              <div className="flex items-center justify-center rounded">
-                <FaUser className="mr-2" />
-                <span className="text-sm text-gray-500">個人</span>
-              </div>
-            </div>
-            <div
-              className={`w-1/2 text-center rounded py-2 ${
-                !isPersonalClicked && "bg-white"
-              }`}
-              onClick={clickOrganizations}
-            >
-              <div className="flex items-center justify-center">
-                <FaUsers className="mr-2" />
-                <span className="text-sm text-gray-500">組織</span>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <RepositoryTypeSelctor
           isPersonalClicked={isPersonalClicked}
           clickPersonal={clickPersonal}
