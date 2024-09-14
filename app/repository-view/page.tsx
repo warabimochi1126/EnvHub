@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IconType } from "react-icons";
 import { FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
+import { TbZoom } from "react-icons/tb";
 
 // TODO:コンポーネント分割・カスタムフックスの作成
 export default function Page() {
@@ -18,6 +19,7 @@ export default function Page() {
           clickPersonal={clickPersonal}
           clickOrganizations={clickOrganizations}
         />
+        <RepoNameSearchBar />
       </div>
       <div className="w-3/4 bg-[#F3F4F6]">
         <span>aaa</span>
@@ -108,6 +110,18 @@ export function OrganizationsRepositoryTypeButton({
     >
       <DrawingIcon className="mr-2" />
       <span className="text-sm text-gray-500">{repositoryTypeText}</span>
+    </div>
+  );
+}
+
+export function RepoNameSearchBar() {
+  return (
+    <div className="relative w-11/12 mx-auto">
+      <TbZoom className="absolute left-3 top-[11px]" size={20} />
+      <input
+        className="w-full flex items-center border py-2 px-10 rounded"
+        placeholder="リポジトリ名で検索"
+      />
     </div>
   );
 }
