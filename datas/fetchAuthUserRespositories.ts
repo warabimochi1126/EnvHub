@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RepositoryList } from "@/types/fetchRepositoryType";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+import { cookies } from "next/headers";
 
 export async function fetchAuthenticatedUserRepositoryNames() {
   const supabase = createClient();
@@ -11,7 +12,19 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   const { data } = await supabase.auth.getSession();
   const providerToken = data.session?.provider_token!;
 
+  /* TODO:場当たり的な対処をしている
+  https://github.com/warabimochi1126/EnvHub/issues/123
+   */
   if (!providerToken) {
+    console.log("providerTokenなくてひっかかってる");
+
+    // 場当たり的な解決策
+    const cookieStore = cookies();
+    const allCookies = cookieStore.getAll();
+    allCookies.forEach((cookie) => {
+      cookieStore.delete(cookie.name);
+    });
+
     redirect("/");
   }
 
