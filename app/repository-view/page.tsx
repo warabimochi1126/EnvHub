@@ -4,7 +4,9 @@ import { IconType } from "react-icons";
 import { FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { TbZoom } from "react-icons/tb";
+import { FcFolder } from "react-icons/fc";
 
+const repoNamesData = ["EnvHub", "GitHub-actions-learn", "e-ten"];
 // TODO:コンポーネント分割・カスタムフックスの作成
 export default function Page() {
   const [isPersonalClicked, setIsPersonalClicked] = useState<boolean>(true);
@@ -20,6 +22,16 @@ export default function Page() {
           clickOrganizations={clickOrganizations}
         />
         <RepoNameSearchBar />
+        {repoNamesData.map((repoName, index) => (
+          // <div
+          //   key={index}
+          //   className="w-11/12 mx-auto border rounded p-2 flex items-center text-sm"
+          // >
+          //   <FcFolder className="mr-2" size={20} />
+          //   <span>{repoName}</span>
+          // </div>
+          <RepoSelectButton key={index} repoName={repoName} />
+        ))}
       </div>
       <div className="w-3/4 bg-[#F3F4F6]">
         <span>aaa</span>
@@ -122,6 +134,19 @@ export function RepoNameSearchBar() {
         className="w-full flex items-center border py-2 px-10 rounded"
         placeholder="リポジトリ名で検索"
       />
+    </div>
+  );
+}
+
+interface RepoSelectButtonProps {
+  repoName: string;
+}
+
+export function RepoSelectButton({ repoName }: RepoSelectButtonProps) {
+  return (
+    <div className="w-11/12 mx-auto border rounded p-2 flex items-center text-sm">
+      <FcFolder className="mr-2" size={20} />
+      <span>{repoName}</span>
     </div>
   );
 }
