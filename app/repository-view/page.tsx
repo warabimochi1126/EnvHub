@@ -10,6 +10,8 @@ import { IoLogoGithub } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 
+import { FaFileUpload } from "react-icons/fa";
+
 import {
   Accordion,
   AccordionItem,
@@ -17,6 +19,8 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
+
+import { useDropzone } from "react-dropzone";
 
 const repoNamesData = ["EnvHub", "GitHub-actions-learn", "e-ten"];
 const orgsData = [
@@ -27,15 +31,23 @@ const orgsData = [
     repoName: ["team-repo-a-3", "team-repo-b-3", "team-repo-c-3"],
   },
 ];
+
 // TODO:コンポーネント分割・カスタムフックスの作成
 export default function Page() {
   const [isPersonalClicked, setIsPersonalClicked] = useState<boolean>(true);
   const clickPersonal = () => setIsPersonalClicked(true);
   const clickOrganizations = () => setIsPersonalClicked(false);
 
+  // TODO:アップロード予定のファイルの名前を入れるstateを準備する
+  const onDrop = (temp: any) => console.log(temp);
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+  });
+
   return (
     <div className="flex">
-      <div className="w-1/4 bg-white h-screen">
+      <div className="w-1/4 bg-white h-screen border-r border-black">
         <RepositoryTypeSelctor
           isPersonalClicked={isPersonalClicked}
           clickPersonal={clickPersonal}
@@ -47,8 +59,26 @@ export default function Page() {
         ))}
         <OrganizationsAccordionWrapper />
       </div>
-      <div className="w-3/4 bg-[#F3F4F6]">
-        <span>aaa</span>
+      <div className="w-3/4 bg-white">
+        <div
+          className="border-2 border-dashed hover:border-gray-400 hover:bg-gray-200 transition-colors duration-500 rounded-xl mx-auto w-11/12 h-80 flex justify-center items-center mt-20"
+          {...getRootProps()}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center">
+            <FaFileUpload size={40} />
+            <span className="mt-4">
+              ここにenvファイルをドラッグ & ドロップしてください
+            </span>
+            <span className="text-gray-400 text-sm">または</span>
+            <button
+              className="bg-black text-white rounded-lg py-2 px-4 mt-2"
+              onClick={open}
+            >
+              envファイルを選択
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
