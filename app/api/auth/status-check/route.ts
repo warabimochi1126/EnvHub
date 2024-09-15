@@ -6,10 +6,12 @@ export async function POST(request: NextRequest) {
   const supabase = createClient();
 
   const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
+  // TODO:場当たり的な解決策
+  const { data } = await supabase.auth.getSession();
+  const providerToken = data.session?.provider_token!;
 
   const accessOrigin = request.nextUrl.origin;
-  // TODO:エラーハンドリングリファクタリングしたい
-  if (isLoggedIn) {
+  if (isLoggedIn && providerToken) {
     let redirectPath;
     try {
       redirectPath = await request.json();
@@ -25,7 +27,6 @@ export async function POST(request: NextRequest) {
 
     if (redirectPath) {
       try {
-        // return NextResponse.redirect(new URL(redirectPath, accessOrigin));
         return NextResponse.json(
           {
             redirectUrl: new URL(redirectPath, accessOrigin),
