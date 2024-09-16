@@ -5,7 +5,7 @@ import { FaUser } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { TbZoom } from "react-icons/tb";
 import { FcFolder } from "react-icons/fc";
-import { IoLogoGithub } from "react-icons/io";
+import { IoLogoGithub, IoMdClose } from "react-icons/io";
 
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
@@ -30,6 +30,28 @@ import { FaRegFile } from "react-icons/fa6";
 
 import { AiOutlineClose } from "react-icons/ai";
 
+import Modal from "react-modal";
+import { useModal } from "../hooks/toppage/useModal";
+
+const modalStyle = {
+  overlay: {
+    top: 0,
+    left: 0,
+    backgroundColor: "rgba(33,33,33,0.8)",
+  },
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "white",
+    borderRadius: "1rem",
+    padding: "1.5rem",
+    width: "500px",
+  },
+};
+
 const repoNamesData = ["EnvHub", "GitHub-actions-learn", "e-ten"];
 const orgsData = [
   { orgName: "team-kaihatu1", repoName: ["team-repo-a-1"] },
@@ -47,7 +69,6 @@ export default function Page() {
   const clickOrganizations = () => setIsPersonalClicked(false);
 
   const [dropFiles, setDropFiles] = useState<File[]>([]);
-  // TODO:アップロード予定のファイルの名前を入れるstateを準備する
   const onDrop = (dropFiles: File[]) => {
     console.log(dropFiles);
     setDropFiles(dropFiles);
@@ -130,9 +151,10 @@ export default function Page() {
                   />
                 </div>
               ))}
-              <button className="bg-gray-800 text-white rounded-md w-full py-3 text-sm hover:bg-gray-700 transition-colors duration-300">
+              {/* <button className="bg-gray-800 text-white rounded-md w-full py-3 text-sm hover:bg-gray-700 transition-colors duration-300">
                 アップロードを確定する
-              </button>
+              </button> */}
+              <UploadConfirmButton uploadFiles={dropFiles} />
             </>
           )}
         </div>
@@ -344,4 +366,65 @@ export function ProgressBar() {
   }, [progressPercent, uploadFileLength]);
 
   return <Progress percent={progressPercent} />;
+}
+
+export function UploadConfirmButton({ uploadFiles }: { uploadFiles: File[] }) {
+  const { isModalOpen, modalOpen, modalClose } = useModal();
+
+  // TODO:後でファイル分割する
+  const fileSizeByteToKB = (fileSizeByte: number): string => {
+    if (fileSizeByte < 1024) {
+      return `${fileSizeByte} Byte`;
+    }
+    const fileSizeInKB = (fileSizeByte / 1024).toFixed(2);
+    return `${fileSizeInKB} KB`;
+  };
+
+  return (
+    <>
+      <button
+        className="bg-gray-800 text-white rounded-md w-full py-3 text-sm hover:bg-gray-700 transition-colors duration-300"
+        onClick={modalOpen}
+      >
+        アップロードを確定する
+      </button>
+      <Modal
+        isOpen={isModalOpen}
+        style={modalStyle}
+        onRequestClose={modalClose}
+      >
+        <div className="flex justify-between">
+          <span className="font-bold text-lg">アップロードの確認</span>
+          <IoMdClose
+            size={35}
+            onClick={modalClose}
+            className="hover:bg-gray-200 rounded-full transition-colors duration-200 p-1.5 relative -top-2 left-2"
+          />
+        </div>
+        <p className="text-sm">
+          以下のファイルをアップロードします。確認してください。
+        </p>
+        <div className="mt-4">
+          {uploadFiles.map((uploadFile, index) => (
+            <div key={index} className="flex justify-between">
+              <span>{uploadFile.name}</span>
+              <span>{fileSizeByteToKB(uploadFile.size)}</span>
+            </div>
+          ))}
+        </div>
+        <hr className="mt-2 h-2" />
+        <div className="flex justify-end space-x-2">
+          <button
+            onClick={modalClose}
+            className="border px-4 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors duration-300"
+          >
+            キャンセル
+          </button>
+          <button className="bg-black text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-colors duration-300">
+            アップロードを確定
+          </button>
+        </div>
+      </Modal>
+    </>
+  );
 }
