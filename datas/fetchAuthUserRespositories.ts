@@ -16,15 +16,6 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   https://github.com/warabimochi1126/EnvHub/issues/123
    */
   if (!providerToken) {
-    console.log("providerTokenなくてひっかかってる");
-
-    // 場当たり的な解決策
-    const cookieStore = cookies();
-    const allCookies = cookieStore.getAll();
-    allCookies.forEach((cookie) => {
-      cookieStore.delete(cookie.name);
-    });
-
     redirect("/");
   }
 
