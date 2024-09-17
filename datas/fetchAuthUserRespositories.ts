@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { RepositoryList } from "@/types/fetchRepositoryType";
 import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
-import { cookies } from "next/headers";
 
+// TODO:バージョンアップ後に削除する
 export async function fetchAuthenticatedUserRepositoryNames() {
   const supabase = createClient();
 
@@ -39,13 +39,24 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   return fetchrepositoriesDataNames;
 }
 
-async function fetchAuthUserOrgsNames(providerToken: string) {
-  // TODO:権限がなくてデータ取れてきてないっぽいのでトークン周り洗い出す
-  // 多分 read:org が足りてなさそう
+async function getAuthUserProviderToken(): Promise<string> {
+  const supabase = createClient();
 
-  const response = await fetch(
-    "https://api.github.com/user/orgs?per_page=100",
-    {
+  const { data } = await supabase.auth.getSession();
+
+  const providerToken = data.session?.provider_token;
+  if (!providerToken) {
+    redirect("/");
+  }
+
+  return providerToken;
+}
+
+async function fetchAuthUserOrgsNames(
+  providerToken: string
+): Promise<string[]> {
+  // prettier-ignore
+  const response = await fetch("https://api.github.com/user/orgs?per_page=100", {
       headers: {
         Authorization: `Bearer ${providerToken}`,
       },
@@ -53,37 +64,70 @@ async function fetchAuthUserOrgsNames(providerToken: string) {
     }
   );
 
-  const fetchOrgsData: RestEndpointMethodTypes["orgs"]["listForAuthenticatedUser"]["response"] =
-    await response.json();
-
-  const fetchOrgsNames = fetchOrgsData.data.map((orgData) => ({
-    orgName: orgData.login,
-  }));
+  // prettier-ignore
+  const fetchOrgsData: RestEndpointMethodTypes["orgs"]["listForAuthenticatedUser"]["response"]["data"] = await response.json();
+  const fetchOrgsNames = fetchOrgsData.map((orgData) => orgData.login);
 
   return fetchOrgsNames;
 }
 
-async function fetchAuthUserOrgsRepoNames(
+async function fetchAuthUserRepoInOrgsNames(
   orgNames: string[],
   providerToken: string
-) {
-  const temp = orgNames.map(async (orgName) => {
-    const response = await fetch(
-      `https://api.github.com/orgs/${orgName}/repos?sort=updated&per_page=100`,
-      {
+): Promise<{ orgName: string; repoNames: string[] }[]> {
+  const repoInOrgsNames = await Promise.all(
+    orgNames.map(async (orgName) => {
+      // prettier-ignore
+      const response = await fetch(`https://api.github.com/orgs/${orgName}/repos?sort=updated&per_page=100`, {
         headers: {
           Authorization: `Bearer ${providerToken}`,
         },
         cache: "no-store",
       }
     );
+      // prettier-ignore
+      const fetchrepoInOrgsData: RestEndpointMethodTypes["repos"]["listForOrg"]["response"]["data"] = await response.json();
+      const fetchrepoInOrgsNames = fetchrepoInOrgsData.map((data) => data.name);
+      return {
+        orgName,
+        repoNames: fetchrepoInOrgsNames,
+      };
+    })
+  );
 
-    const fetchOrgsRepoData: RestEndpointMethodTypes["repos"]["listForOrg"]["response"] =
-      await response.json();
-    const fetchOrgsRepoNames = fetchOrgsRepoData.data.map((data) => ({
-      repoName: data.full_name,
-    }));
+  return repoInOrgsNames;
+}
 
-    return fetchOrgsRepoNames;
-  });
+async function fetchAuthUserRepoNames(
+  providerToken: string
+): Promise<string[]> {
+  // prettier-ignore
+  const response = await fetch("https://api.github.com/user/repos?sort=updated&per_page=100", {
+      headers: {
+        Authorization: `Bearer ${providerToken}`,
+      },
+      cache: "no-store",
+    }
+  );
+
+  // prettier-ignore
+  const fetchReposData: RestEndpointMethodTypes["repos"]["listForAuthenticatedUser"]["response"]["data"] = await response.json();
+  const fetchRepoNames = fetchReposData.map(
+    (fetchRepoData) => fetchRepoData.name
+  );
+
+  return fetchRepoNames;
+}
+
+export async function fetchRepoNames() {
+  const providerToken = await getAuthUserProviderToken();
+
+  return fetchAuthUserRepoNames(providerToken);
+}
+
+export async function fetchOrgsLinkRepoNames() {
+  const providerToken = await getAuthUserProviderToken();
+  const orgNames = await fetchAuthUserOrgsNames(providerToken);
+
+  return await fetchAuthUserRepoInOrgsNames(orgNames, providerToken);
 }

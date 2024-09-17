@@ -6,9 +6,15 @@ import { RepoNameSearchBar } from "../elements/repo-name-search-bar";
 import { RepoSelectButton } from "../elements/repo-select-button";
 import { OrganizationsAccordionWrapper } from "../elements/organizations-accordion-wrapper";
 
-const repoNameArray = ["EnvHub", "GitHub-actions-learn", "e-ten"];
-
-export function RepositorySelctorArea() {
+interface RepositorySelctorAreaProps {
+  repoNames: string[];
+  orgLinkRepoNames: {
+    orgName: string;
+    repoNames: string[];
+  }[];
+}
+// prettier-ignore
+export function RepositorySelctorArea({ repoNames, orgLinkRepoNames }: RepositorySelctorAreaProps) {
   //prettier-ignore
   const { isPersonalClicked, clickPersonal, clickOrganization } = usePersonalOrOrganization();
 
@@ -21,11 +27,11 @@ export function RepositorySelctorArea() {
       />
       <RepoNameSearchBar />
       {isPersonalClicked ? (
-        repoNameArray.map((repoName, index) => (
+        repoNames.map((repoName, index) => (
           <RepoSelectButton key={index} repoName={repoName} />
         ))
       ) : (
-        <OrganizationsAccordionWrapper />
+        <OrganizationsAccordionWrapper orgLinkRepoNames={orgLinkRepoNames} />
       )}
     </>
   );
