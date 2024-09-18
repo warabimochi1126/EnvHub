@@ -11,7 +11,7 @@ export default async function Page() {
 
   return (
     <div className="flex">
-      <div className="w-1/4 bg-white h-screen border-r border-black">
+      <div className="w-1/4 bg-white h-screen border-r border-black overflow-y-scroll scrollbar">
         <RepositorySelctorArea
           repoNames={repoNames}
           orgLinkRepoNames={orgLinkRepoNames}
