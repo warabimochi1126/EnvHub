@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 import {
@@ -10,16 +12,17 @@ import {
 import { OrganizationsSelectButton } from "./organizations-select-button";
 import { RepoSelectButton } from "./repo-select-button";
 
-const orgsData = [
-  { orgName: "team-kaihatu1", repoName: ["team-repo-a-1"] },
-  { orgName: "team-kaihatu2", repoName: ["team-repo-a-2", "team-repo-b-2"] },
-  {
-    orgName: "team-kaihatu3",
-    repoName: ["team-repo-a-3", "team-repo-b-3", "team-repo-c-3"],
-  },
-];
+interface OrganizationsAccordionWrapperProps {
+  orgLinkRepoNames: {
+    orgName: string;
+    repoNames: string[];
+  }[];
+}
 
-export function OrganizationsAccordionWrapper() {
+export function OrganizationsAccordionWrapper({
+  orgLinkRepoNames,
+}: OrganizationsAccordionWrapperProps) {
+  console.log(orgLinkRepoNames);
   const [toggleOrgName, setToggleOrgName] = useState<string>("");
 
   const toggleOrgNameHandler = (currentClickOrgName: string) => {
@@ -33,20 +36,20 @@ export function OrganizationsAccordionWrapper() {
 
   return (
     <Accordion allowZeroExpanded>
-      {orgsData.map((orgData, index) => (
+      {orgLinkRepoNames.map((orgLinkRepoName, index) => (
         <AccordionItem key={index}>
           <AccordionItemHeading
-            onClick={() => toggleOrgNameHandler(orgData.orgName)}
+            onClick={() => toggleOrgNameHandler(orgLinkRepoName.orgName)}
           >
             <AccordionItemButton>
               <OrganizationsSelectButton
-                organizationName={orgData.orgName}
-                isAccordionClicked={orgData.orgName === toggleOrgName}
+                organizationName={orgLinkRepoName.orgName}
+                isAccordionClicked={orgLinkRepoName.orgName === toggleOrgName}
               />
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            {orgData.repoName.map((repoName, index) => (
+            {orgLinkRepoName.repoNames.map((repoName, index) => (
               <RepoSelectButton key={index} repoName={repoName} />
             ))}
           </AccordionItemPanel>
