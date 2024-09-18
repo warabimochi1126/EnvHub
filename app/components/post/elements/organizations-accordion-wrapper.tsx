@@ -17,10 +17,12 @@ interface OrganizationsAccordionWrapperProps {
     orgName: string;
     repoNames: string[];
   }[];
+  searchQuery: string;
 }
 
 export function OrganizationsAccordionWrapper({
   orgLinkRepoNames,
+  searchQuery,
 }: OrganizationsAccordionWrapperProps) {
   console.log(orgLinkRepoNames);
   const [toggleOrgName, setToggleOrgName] = useState<string>("");
@@ -49,9 +51,13 @@ export function OrganizationsAccordionWrapper({
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            {orgLinkRepoName.repoNames.map((repoName, index) => (
-              <RepoSelectButton key={index} repoName={repoName} />
-            ))}
+            {orgLinkRepoName.repoNames
+              .filter((repoName) =>
+                repoName.toLowerCase().includes(searchQuery)
+              )
+              .map((repoName, index) => (
+                <RepoSelectButton key={index} repoName={repoName} />
+              ))}
           </AccordionItemPanel>
         </AccordionItem>
       ))}
