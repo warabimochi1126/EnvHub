@@ -5,6 +5,7 @@ import { PersonalOrganizationSelctor } from "../elements/personal-organization-s
 import { RepoNameSearchBar } from "../elements/repo-name-search-bar";
 import { RepoSelectButton } from "../elements/repo-select-button";
 import { OrganizationsAccordionWrapper } from "../elements/organizations-accordion-wrapper";
+import { useState } from "react";
 
 interface RepositorySelctorAreaProps {
   repoNames: string[];
@@ -17,7 +18,8 @@ interface RepositorySelctorAreaProps {
 export function RepositorySelctorArea({ repoNames, orgLinkRepoNames }: RepositorySelctorAreaProps) {
   //prettier-ignore
   const { isPersonalClicked, clickPersonal, clickOrganization } = usePersonalOrOrganization();
-
+  const [ searchQuery, setSearchQuery ] = useState<string>("");
+  
   return (
     <>
       <PersonalOrganizationSelctor
@@ -25,13 +27,15 @@ export function RepositorySelctorArea({ repoNames, orgLinkRepoNames }: Repositor
         clickPersonal={clickPersonal}
         clickOrganizations={clickOrganization}
       />
-      <RepoNameSearchBar />
+      <RepoNameSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {isPersonalClicked ? (
-        repoNames.map((repoName, index) => (
+        repoNames
+        .filter(repoName => repoName.toLowerCase().includes(searchQuery.toLowerCase()))
+        .map((repoName, index) => (
           <RepoSelectButton key={index} repoName={repoName} />
         ))
       ) : (
-        <OrganizationsAccordionWrapper orgLinkRepoNames={orgLinkRepoNames} />
+        <OrganizationsAccordionWrapper orgLinkRepoNames={orgLinkRepoNames} searchQuery={searchQuery} />
       )}
     </>
   );
