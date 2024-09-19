@@ -74,7 +74,15 @@ async function fetchAuthUserOrgsNames(
 async function fetchAuthUserRepoInOrgsNames(
   orgNames: string[],
   providerToken: string
-): Promise<{ orgName: string; repoNames: string[] }[]> {
+): Promise<
+  {
+    orgName: string;
+    reposData: {
+      repoId: number;
+      repoName: string;
+    }[];
+  }[]
+> {
   const repoInOrgsNames = await Promise.all(
     orgNames.map(async (orgName) => {
       // prettier-ignore
@@ -86,11 +94,14 @@ async function fetchAuthUserRepoInOrgsNames(
       }
     );
       // prettier-ignore
-      const fetchrepoInOrgsData: RestEndpointMethodTypes["repos"]["listForOrg"]["response"]["data"] = await response.json();
-      const fetchrepoInOrgsNames = fetchrepoInOrgsData.map((data) => data.name);
+      const fetchRepoInOrgsData: RestEndpointMethodTypes["repos"]["listForOrg"]["response"]["data"] = await response.json();
+      const fetchrepoInOrgsNames = fetchRepoInOrgsData.map((data) => ({
+        repoId: data.id,
+        repoName: data.name,
+      }));
       return {
         orgName,
-        repoNames: fetchrepoInOrgsNames,
+        reposData: fetchrepoInOrgsNames,
       };
     })
   );
@@ -100,7 +111,7 @@ async function fetchAuthUserRepoInOrgsNames(
 
 async function fetchAuthUserRepoNames(
   providerToken: string
-): Promise<string[]> {
+): Promise<{ repoId: number; repoName: string }[]> {
   // prettier-ignore
   const response = await fetch("https://api.github.com/user/repos?sort=updated&per_page=100", {
       headers: {
@@ -112,14 +123,15 @@ async function fetchAuthUserRepoNames(
 
   // prettier-ignore
   const fetchReposData: RestEndpointMethodTypes["repos"]["listForAuthenticatedUser"]["response"]["data"] = await response.json();
-  const fetchRepoNames = fetchReposData.map(
-    (fetchRepoData) => fetchRepoData.name
-  );
+  const fetchRepoNames = fetchReposData.map((fetchRepoData) => ({
+    repoId: fetchRepoData.id,
+    repoName: fetchRepoData.name,
+  }));
 
   return fetchRepoNames;
 }
 
-export async function fetchRepoNames() {
+export async function fetchMyRepoNames() {
   const providerToken = await getAuthUserProviderToken();
 
   return fetchAuthUserRepoNames(providerToken);

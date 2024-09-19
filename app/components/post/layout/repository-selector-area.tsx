@@ -8,14 +8,17 @@ import { OrganizationsAccordionWrapper } from "../elements/organizations-accordi
 import { useState } from "react";
 
 interface RepositorySelctorAreaProps {
-  repoNames: string[];
+  myRepoNames: { repoId: number; repoName: string }[];
   orgLinkRepoNames: {
     orgName: string;
-    repoNames: string[];
+    reposData: {
+      repoId: number;
+      repoName: string;
+    }[];
   }[];
 }
 // prettier-ignore
-export function RepositorySelctorArea({ repoNames, orgLinkRepoNames }: RepositorySelctorAreaProps) {
+export function RepositorySelctorArea({ myRepoNames, orgLinkRepoNames }: RepositorySelctorAreaProps) {
   //prettier-ignore
   const { isPersonalClicked, clickPersonal, clickOrganization } = usePersonalOrOrganization();
   const [ searchQuery, setSearchQuery ] = useState<string>("");
@@ -29,10 +32,10 @@ export function RepositorySelctorArea({ repoNames, orgLinkRepoNames }: Repositor
       />
       <RepoNameSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       {isPersonalClicked ? (
-        repoNames
-        .filter(repoName => repoName.toLowerCase().includes(searchQuery.toLowerCase()))
-        .map((repoName, index) => (
-          <RepoSelectButton key={index} repoName={repoName} />
+        myRepoNames
+        .filter(myRepoName => myRepoName.repoName.toLowerCase().includes(searchQuery.toLowerCase()))
+        .map((myRepoName, index) => (
+          <RepoSelectButton key={index} repoName={myRepoName.repoName} repoId={myRepoName.repoId} />
         ))
       ) : (
         <OrganizationsAccordionWrapper orgLinkRepoNames={orgLinkRepoNames} searchQuery={searchQuery} />

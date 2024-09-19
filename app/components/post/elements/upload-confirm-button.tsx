@@ -1,3 +1,5 @@
+"use client";
+
 import { useModal } from "@/app/hooks/toppage/useModal";
 import Modal from "react-modal";
 import { UploadModalHeader } from "./inmodal/upload-modal-header";
@@ -52,7 +54,10 @@ export function UploadConfirmButton({
         <UploadModalHeader modalClose={modalClose} />
         <UploadModalContent uploadFiles={uploadFiles} />
         <hr className="mt-2 h-2" />
-        <UploadModalFooterButton modalClose={modalClose} />
+        <UploadModalFooterButton
+          modalClose={modalClose}
+          uploadFiles={uploadFiles}
+        />
       </Modal>
     </>
   );

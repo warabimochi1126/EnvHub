@@ -15,7 +15,10 @@ import { RepoSelectButton } from "./repo-select-button";
 interface OrganizationsAccordionWrapperProps {
   orgLinkRepoNames: {
     orgName: string;
-    repoNames: string[];
+    reposData: {
+      repoId: number;
+      repoName: string;
+    }[];
   }[];
   searchQuery: string;
 }
@@ -51,12 +54,16 @@ export function OrganizationsAccordionWrapper({
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            {orgLinkRepoName.repoNames
-              .filter((repoName) =>
-                repoName.toLowerCase().includes(searchQuery)
+            {orgLinkRepoName.reposData
+              .filter((repoData) =>
+                repoData.repoName.toLowerCase().includes(searchQuery)
               )
-              .map((repoName, index) => (
-                <RepoSelectButton key={index} repoName={repoName} />
+              .map((repoData, index) => (
+                <RepoSelectButton
+                  key={index}
+                  repoName={repoData.repoName}
+                  repoId={repoData.repoId}
+                />
               ))}
           </AccordionItemPanel>
         </AccordionItem>
