@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ProgressBar } from "../elements/progress-bar";
 import { UploadPreviewFileContent } from "../elements/upload-preview-file-content";
 import { UploadConfirmButton } from "../elements/upload-confirm-button";
+import { useRepoDataStore } from "@/store/repositoryGlobalState";
 
 interface FileUploadPreviewAreaProps {
   dropFiles: File[];
@@ -15,6 +16,7 @@ export function FileUploadPreviewArea({
   setDropFiles,
 }: FileUploadPreviewAreaProps) {
   const [progressPercent, setProgressPercent] = useState<number>(0);
+  const { selectedRepoData } = useRepoDataStore();
 
   return (
     <div className="w-11/12 mx-auto mt-10 border-2 rounded-lg p-4">
@@ -29,12 +31,15 @@ export function FileUploadPreviewArea({
           />
           {dropFiles.map((dropFile, index) => (
             <UploadPreviewFileContent
+              key={dropFile.name}
               dropFile={dropFile}
               index={index}
               setDropFiles={setDropFiles}
             />
           ))}
-          {progressPercent === 100 ? (
+          {progressPercent === 100 &&
+          selectedRepoData.repoId &&
+          selectedRepoData.repoName ? (
             // prettier-ignore
             <UploadConfirmButton uploadFiles={dropFiles} isButtonEnabled={true} />
           ) : (

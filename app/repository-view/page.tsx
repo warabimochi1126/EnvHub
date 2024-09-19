@@ -2,18 +2,18 @@ import { RepositorySelctorArea } from "../components/post/layout/repository-sele
 import { DropEnvArea } from "../components/post/layout/drop-env-area";
 import {
   fetchOrgsLinkRepoNames,
-  fetchRepoNames,
+  fetchMyRepoNames,
 } from "@/datas/fetchAuthUserRespositories";
 
 export default async function Page() {
-  const repoNames = await fetchRepoNames();
+  const myRepoNames = await fetchMyRepoNames();
   const orgLinkRepoNames = await fetchOrgsLinkRepoNames();
 
   return (
     <div className="flex">
       <div className="w-1/4 bg-white h-screen border-r border-black overflow-y-scroll scrollbar">
         <RepositorySelctorArea
-          repoNames={repoNames}
+          myRepoNames={myRepoNames}
           orgLinkRepoNames={orgLinkRepoNames}
         />
       </div>
