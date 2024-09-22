@@ -16,7 +16,7 @@ export function UploadModalFooterButton({ modalClose, uploadFiles }: UploadModal
     uploadTargetFiles.forEach((uploadTargetFile) => {
       uploadRequestBody.append("upload_target_files", uploadTargetFile);
     });
-    uploadRequestBody.append("metaData", JSON.stringify({
+    uploadRequestBody.append("meta_data", JSON.stringify({
       repo_name: selectedRepoData.repoName,
       repo_id: selectedRepoData.repoId,
     }))

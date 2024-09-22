@@ -12,7 +12,7 @@ export const githubSignIn = async (redirectPath: string) => {
     provider: "github",
     options: {
       scopes: "repo read:org",
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/auth/callback?next=${redirectPath}`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/auth/callback?next=${redirectPath}`,
     },
   });
 
