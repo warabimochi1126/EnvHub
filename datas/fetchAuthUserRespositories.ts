@@ -39,7 +39,7 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   return fetchrepositoriesDataNames;
 }
 
-async function getAuthUserProviderToken(): Promise<string> {
+export async function getAuthUserProviderToken(): Promise<string> {
   const supabase = createClient();
 
   const { data } = await supabase.auth.getSession();
@@ -142,4 +142,20 @@ export async function fetchOrgsLinkRepoNames() {
   const orgNames = await fetchAuthUserOrgsNames(providerToken);
 
   return await fetchAuthUserRepoInOrgsNames(orgNames, providerToken);
+}
+
+// TODO:こちらはサーバサイドで使っているので後に移管する
+// prettier-ignore
+export async function isAuthUserRepository( repoId: number ): Promise<boolean> {  
+  const [ myReposdata, OrgsData ] = await Promise.all([fetchMyRepoNames(), fetchOrgsLinkRepoNames()]);
+
+  const hasRepoId = myReposdata.some(myRepoData => myRepoData.repoId === repoId);
+  if (hasRepoId) return true;
+
+  const hasOrgRepoId = OrgsData.some(OrgData => 
+    OrgData.reposData.some(orgRepoData => orgRepoData.repoId === repoId)
+  );
+  if (hasOrgRepoId) return true;
+
+  return false;
 }
