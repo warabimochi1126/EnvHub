@@ -1,6 +1,6 @@
-import { getAuthUserProviderToken, isAuthUserRepository } from "@/datas/fetchAuthUserRespositories";
+import { isAuthUserRepository } from "@/datas/fetchAuthUserRespositories";
 import { createClient } from "@/lib/supabase/server";
-// import { Database } from "@/types/database.types";
+import { isValidEnvFileList, isValidMetaData } from "@/validation/backend/file-upload.validation";
 import { randomUUID } from "crypto";
 import { NextRequest } from "next/server";
 
@@ -10,6 +10,7 @@ interface MetaData {
   commit_message: string;
 }
 
+// TODO: 処理毎に分離したい
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
@@ -19,15 +20,9 @@ export async function POST(request: NextRequest) {
     const metaData = JSON.parse(metaDataInFormData as string) as MetaData;
     const uploadTargetFiles = receivedFormData.getAll("upload_target_files") as File[];
 
-    // TODO: バリデーションの実装
-    // 1.meta_data側はrepo_nameがstringであること、repo_idがnumber,であることのバリデーションを行う
-    // commit_messageはstringであることを確認する、ただし空文字であることを許容し、その場合はこちら側でコミットメッセージを決める
-    // 2.upload_target_filesは .envからファイル名が始まっていること,ファイルサイズが50KB未満であることのバリデーションを行う
-    // console.log("metaData.repo_id", metaData.repo_id);
-    // console.log("metaData.repo_name", metaData.repo_name);
-    // console.log("metaData.commit_message", metaData.commit_message);
-
-    // console.log(uploadTargetFiles[0]);
+    if (!isValidMetaData(metaData) || !isValidEnvFileList(uploadTargetFiles)) {
+      throw new Error();
+    }
 
     // 紐づけリポジトリを本人が保持しているかの確認
     const isAuthorizedRepository = isAuthUserRepository(metaData.repo_id);

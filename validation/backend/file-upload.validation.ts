@@ -11,7 +11,7 @@ const envFileSchema = z.object({
 
 const envFileListSchema = z.array(envFileSchema).min(1);
 
-export function isEnvFileList(uploadTargetFiles: File[]): boolean {
+export function isValidEnvFileList(uploadTargetFiles: File[]): boolean {
   try {
     envFileListSchema.parse(uploadTargetFiles);
   } catch {
@@ -26,9 +26,9 @@ const metaDataSchema = z.object({
   commit_message: z.string(),
 });
 
-export type metaData = z.infer<typeof metaDataSchema>;
+export type MetaData = z.infer<typeof metaDataSchema>;
 
-export function isValidMetaData(metaData: metaData) {
+export function isValidMetaData(metaData: MetaData) {
   try {
     metaDataSchema.parse(metaData);
   } catch {
