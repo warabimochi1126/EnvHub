@@ -4,21 +4,35 @@ import { z } from "zod";
 // 1ファイルの最大サイズは50KBとする
 const maxFileSize = 1 * 1024 * 50;
 
-const envFileListSchema = z.array(
-  z.object({
-    name: z.string().startsWith(".env"),
-    size: z
-      .number()
-      .lte(maxFileSize, { message: "適切なファイルサイズのファイルをアップロードしてください。" }),
-  })
-);
+const envFileSchema = z.object({
+  name: z.string().startsWith(".env"),
+  size: z.number().lte(maxFileSize),
+});
 
-export function isEnvFileList(uploadTargetFiles: File[]): File[] {
+const envFileListSchema = z.array(envFileSchema).min(1);
+
+export function isEnvFileList(uploadTargetFiles: File[]): boolean {
   try {
-    const temp = envFileListSchema.parse(uploadTargetFiles);
-    console.log(temp);
-    return uploadTargetFiles;
-  } catch (e) {
-    throw new Error();
+    envFileListSchema.parse(uploadTargetFiles);
+  } catch {
+    return false;
   }
+  return true;
+}
+
+const metaDataSchema = z.object({
+  repo_name: z.string().min(1),
+  repo_id: z.number().int().positive(),
+  commit_message: z.string(),
+});
+
+export type metaData = z.infer<typeof metaDataSchema>;
+
+export function isValidMetaData(metaData: metaData) {
+  try {
+    metaDataSchema.parse(metaData);
+  } catch {
+    return false;
+  }
+  return true;
 }
