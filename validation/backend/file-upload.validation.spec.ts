@@ -47,13 +47,20 @@ describe("isValidMetaData", () => {
   });
 
   describe("引数にmetaData型の値が渡る時", () => {
+    const validMetaData: metaData = {
+      repo_name: "EnvHub",
+      repo_id: 123456789,
+      commit_message: "feat(postpage): supabaseとの接続を追加する",
+    };
+
+    const createMetaData = (overRideProps: Partial<metaData> = {}): metaData => ({
+      ...validMetaData,
+      ...overRideProps,
+    });
+
     describe("repo_name,repo_id,commit_messageに適切な値が渡る時", () => {
       test("trueが返ること", () => {
-        const result = isValidMetaData({
-          repo_name: "EnvHub",
-          repo_id: 123456789,
-          commit_message: "feat(postpage): supabaseとの接続を追加する",
-        });
+        const result = isValidMetaData(createMetaData());
 
         expect(result).toBe(true);
       });
@@ -61,11 +68,7 @@ describe("isValidMetaData", () => {
 
     describe("repo_nameが空文字である時", () => {
       test("falseが返ること", () => {
-        const result = isValidMetaData({
-          repo_name: "",
-          repo_id: 123456789,
-          commit_message: "feat(postpage): supabaseとの接続を追加する",
-        });
+        const result = isValidMetaData(createMetaData({ repo_name: "" }));
 
         expect(result).toBe(false);
       });
@@ -73,11 +76,7 @@ describe("isValidMetaData", () => {
 
     describe("repo_idが0である場合", () => {
       test("falseが返ること", () => {
-        const result = isValidMetaData({
-          repo_name: "EnvHub",
-          repo_id: 0,
-          commit_message: "feat(postpage): supabaseとの接続を追加する",
-        });
+        const result = isValidMetaData(createMetaData({ repo_id: 0 }));
 
         expect(result).toBe(false);
       });
@@ -85,11 +84,7 @@ describe("isValidMetaData", () => {
 
     describe("commit_messageが空文字である場合", () => {
       test("trueが返ること", () => {
-        const result = isValidMetaData({
-          repo_name: "EnvHub",
-          repo_id: 123456789,
-          commit_message: "",
-        });
+        const result = isValidMetaData(createMetaData({ commit_message: "" }));
 
         expect(result).toBe(true);
       });
