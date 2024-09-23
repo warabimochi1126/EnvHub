@@ -22,8 +22,6 @@ export async function GET(
       );
     }
 
-    // TODO:repoIdを使って、最新コミットを取得 -> 最新コミットを使ってファイル名を全て取得 -> コミットID +ファイル名でオブジェクトストレージから必要な情報を取得する
-    // commitIdがlatestなら最新コミットを引っ張ってくる、そうでなければそれでreadする
     let targetCommitUuid: string = "";
     if (commitUuid === "latest") {
       const { data: latestCommitData, error: latestCommitError } = await supabase
@@ -41,8 +39,6 @@ export async function GET(
 
     targetCommitUuid = targetCommitUuid ? targetCommitUuid : commitUuid;
     // TODO:取得処理は正しいが、保存上手くいってなさそうなので、保存側を修正する
-    // UUID + ファイル名でファイルのオブジェクト情報が取得出来る
-    // TODO:repoIdとcommitIdを使ってファイル名取得
     const { data: fileNames, error: commitFilesHistoryError } = await supabase
       .from("commit_files_history")
       .select("file_names")
@@ -61,6 +57,7 @@ export async function GET(
       throw new Error();
     }
 
+    // TODO:返すデータを精査する
     return Response.json(storageData, { status: 200 });
   } catch {
     return Response.json({ message: "何らかの理由でファイル取得が成功しませんでした。" }, { status: 500 });
