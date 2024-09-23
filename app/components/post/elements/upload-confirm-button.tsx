@@ -4,7 +4,9 @@ import { useModal } from "@/app/hooks/toppage/useModal";
 import Modal from "react-modal";
 import { UploadModalHeader } from "./inmodal/upload-modal-header";
 import { UploadModalContent } from "./inmodal/upload-modal-content";
-import { UploadModalFooterButton } from "./inmodal/upload-modal-footer-button";
+import { UploadModalFooter } from "./inmodal/upload-modal-footer-button";
+import { UploadModalCommitMessage } from "./inmodal/upload-modal-commit-message";
+import { useState } from "react";
 
 const modalStyle = {
   overlay: {
@@ -30,11 +32,9 @@ interface UploadConfirmButtonProps {
   isButtonEnabled: boolean;
 }
 
-export function UploadConfirmButton({
-  uploadFiles,
-  isButtonEnabled,
-}: UploadConfirmButtonProps) {
+export function UploadConfirmButton({ uploadFiles, isButtonEnabled }: UploadConfirmButtonProps) {
   const { isModalOpen, modalOpen, modalClose } = useModal();
+  const [commitMessage, setCommitMessage] = useState<string>("");
 
   return (
     <>
@@ -46,18 +46,22 @@ export function UploadConfirmButton({
       >
         アップロードを確定する
       </button>
-      <Modal
-        isOpen={isModalOpen}
-        style={modalStyle}
-        onRequestClose={modalClose}
-      >
+      <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={modalClose}>
         <UploadModalHeader modalClose={modalClose} />
         <UploadModalContent uploadFiles={uploadFiles} />
         <hr className="mt-2 h-2" />
-        <UploadModalFooterButton
-          modalClose={modalClose}
-          uploadFiles={uploadFiles}
-        />
+        {/* <div className="mt-1">
+          <div className="flex items-center">
+            <IoAlertCircleOutline className="mr-1" />
+            <p className="text-sm">以下の入力欄でコミットメッセージを決められます。</p>
+          </div>
+          <input
+            placeholder="コミットメッセージを入力してください"
+            className="w-full rounded border p-1 mt-1"
+          />
+        </div> */}
+        <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
+        <UploadModalFooter modalClose={modalClose} uploadFiles={uploadFiles} commitMessage={commitMessage} />
       </Modal>
     </>
   );
