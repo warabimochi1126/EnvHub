@@ -1,5 +1,6 @@
 import { isAuthUserRepository } from "@/datas/fetchAuthUserRespositories";
 import { createClient } from "@/lib/supabase/server";
+import { isValidStorageDataRequestObject } from "@/validation/backend/get-storage-data.validation";
 import { NextRequest } from "next/server";
 
 // TODO:後にservice,repositoryで分離する
@@ -11,7 +12,9 @@ export async function GET(
     const supabase = createClient();
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
 
-    // TODO:repoId: string,  commitId: stringでバリデーションする
+    if (!isValidStorageDataRequestObject({ repositoryId, commitUuid })) {
+      throw new Error();
+    }
 
     // 紐づけリポジトリを本人が保持しているかの確認
     const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
