@@ -2,12 +2,17 @@
 
 import { isAuthUserRepository } from "@/datas/fetchAuthUserRespositories";
 import { createClient } from "@/lib/supabase/server";
+import { isValidRepositoryId } from "@/validation/backend/get-commit-list.validation";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: { repository_id: string } }) {
   try {
     const supabase = createClient();
     const repositoryId = params.repository_id;
+
+    if (!isValidRepositoryId(repositoryId)) {
+      throw new Error();
+    }
 
     // 紐づけリポジトリを本人が保持しているかの確認
     const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
