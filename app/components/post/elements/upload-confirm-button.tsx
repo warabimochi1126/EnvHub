@@ -50,16 +50,6 @@ export function UploadConfirmButton({ uploadFiles, isButtonEnabled }: UploadConf
         <UploadModalHeader modalClose={modalClose} />
         <UploadModalContent uploadFiles={uploadFiles} />
         <hr className="mt-2 h-2" />
-        {/* <div className="mt-1">
-          <div className="flex items-center">
-            <IoAlertCircleOutline className="mr-1" />
-            <p className="text-sm">以下の入力欄でコミットメッセージを決められます。</p>
-          </div>
-          <input
-            placeholder="コミットメッセージを入力してください"
-            className="w-full rounded border p-1 mt-1"
-          />
-        </div> */}
         <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
         <UploadModalFooter modalClose={modalClose} uploadFiles={uploadFiles} commitMessage={commitMessage} />
       </Modal>
