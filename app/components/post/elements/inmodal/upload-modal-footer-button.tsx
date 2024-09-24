@@ -1,14 +1,17 @@
 "use client";
 
 import { useRepoDataStore } from "@/store/repositoryGlobalState";
+import { Dispatch, SetStateAction } from "react";
+import { CommitState } from "../upload-confirm-button";
 
 interface UploadModalFooterButtonProps {
   modalClose: () => void;
   uploadFiles: File[];
   commitMessage: string;
+  setCommitState: Dispatch<SetStateAction<CommitState>>;
 }
 // prettier-ignore
-export function UploadModalFooter({ modalClose, uploadFiles, commitMessage }: UploadModalFooterButtonProps) {
+export function UploadModalFooterButton({ modalClose, uploadFiles, commitMessage, setCommitState }: UploadModalFooterButtonProps) {
   const { selectedRepoData } = useRepoDataStore();
 
   const confirmUpload = (uploadTargetFiles: File[]) => {
@@ -21,8 +24,10 @@ export function UploadModalFooter({ modalClose, uploadFiles, commitMessage }: Up
       repo_name: selectedRepoData.repoName,
       repo_id: selectedRepoData.repoId,
       commit_message: commitMessage
-    }))
+    }));
 
+    setCommitState("DURING");
+    
     const response = fetch("/api/uploads/confirm", {
       method: "POST",
       body: uploadRequestBody,
