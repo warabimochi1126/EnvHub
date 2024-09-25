@@ -56,18 +56,25 @@ export function UploadConfirmButton({ uploadFiles, isButtonEnabled }: UploadConf
         アップロードを確定する
       </button>
       <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={modalClose}>
-        <UploadResultModalContent />
-        {/* <UploadDuringModalContent /> */}
-        {/* <UploadModalHeader modalClose={modalClose} />
-        <UploadModalContent uploadFiles={uploadFiles} />
-        <hr className="mt-2 h-2" />
-        <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
-        <UploadModalFooterButton
-          modalClose={modalClose}
-          uploadFiles={uploadFiles}
-          commitMessage={commitMessage}
-          setCommitState={setCommitState}
-        /> */}
+        {commitState === "BEFORE" ? (
+          <>
+            <UploadModalContent uploadFiles={uploadFiles} />
+            <hr className="mt-2 h-2" />
+            <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
+            <UploadModalFooterButton
+              modalClose={modalClose}
+              uploadFiles={uploadFiles}
+              commitMessage={commitMessage}
+              setCommitState={setCommitState}
+            />
+          </>
+        ) : commitState === "DURING" ? (
+          <UploadDuringModalContent />
+        ) : commitState === "SUCCESS" ? (
+          <UploadResultModalContent result={"SUCCESS"} />
+        ) : commitState === "FAIL" ? (
+          <UploadResultModalContent result={"FAIL"} />
+        ) : null}
       </Modal>
     </>
   );
