@@ -1,19 +1,23 @@
 "use client";
 
 import { useRepoDataStore } from "@/store/repositoryGlobalState";
+import { Dispatch, SetStateAction } from "react";
+import { CommitState } from "../upload-confirm-button";
 
 interface UploadModalFooterButtonProps {
   modalClose: () => void;
   uploadFiles: File[];
   commitMessage: string;
+  setCommitState: Dispatch<SetStateAction<CommitState>>;
 }
 // prettier-ignore
-export function UploadModalFooter({ modalClose, uploadFiles, commitMessage }: UploadModalFooterButtonProps) {
+export function UploadModalFooterButton({ modalClose, uploadFiles, commitMessage, setCommitState }: UploadModalFooterButtonProps) {
   const { selectedRepoData } = useRepoDataStore();
 
-  const confirmUpload = (uploadTargetFiles: File[]) => {
-    const uploadRequestBody = new FormData();
+  const confirmUpload = async (uploadTargetFiles: File[]) => {
+    setCommitState("DURING");
 
+    const uploadRequestBody = new FormData();
     uploadTargetFiles.forEach((uploadTargetFile) => {
       uploadRequestBody.append("upload_target_files", uploadTargetFile);
     });
@@ -21,12 +25,18 @@ export function UploadModalFooter({ modalClose, uploadFiles, commitMessage }: Up
       repo_name: selectedRepoData.repoName,
       repo_id: selectedRepoData.repoId,
       commit_message: commitMessage
-    }))
-
-    const response = fetch("/api/uploads/confirm", {
+    }));
+    
+    const response = await fetch("/api/uploads/confirm", {
       method: "POST",
       body: uploadRequestBody,
     });
+
+    if(response.ok) {
+      setCommitState("SUCCESS");
+    } else {
+      setCommitState("FAIL");
+    }
   }
 
   return (

@@ -4,9 +4,15 @@ import { useModal } from "@/app/hooks/toppage/useModal";
 import Modal from "react-modal";
 import { UploadModalHeader } from "./inmodal/upload-modal-header";
 import { UploadModalContent } from "./inmodal/upload-modal-content";
-import { UploadModalFooter } from "./inmodal/upload-modal-footer-button";
+import { UploadModalFooterButton } from "./inmodal/upload-modal-footer-button";
 import { UploadModalCommitMessage } from "./inmodal/upload-modal-commit-message";
 import { useState } from "react";
+
+import { PulseLoader } from "react-spinners";
+import { BsCheck2Circle } from "react-icons/bs";
+import { FaArrowRight } from "react-icons/fa";
+import { UploadResultModalContent } from "./inmodal/result/upload-result-modal-content";
+import { UploadDuringModalContent } from "./inmodal/during/upload-during-modal-content";
 
 const modalStyle = {
   overlay: {
@@ -32,9 +38,12 @@ interface UploadConfirmButtonProps {
   isButtonEnabled: boolean;
 }
 
+export type CommitState = "BEFORE" | "DURING" | "SUCCESS" | "FAIL";
+
 export function UploadConfirmButton({ uploadFiles, isButtonEnabled }: UploadConfirmButtonProps) {
   const { isModalOpen, modalOpen, modalClose } = useModal();
   const [commitMessage, setCommitMessage] = useState<string>("");
+  const [commitState, setCommitState] = useState<CommitState>("BEFORE");
 
   return (
     <>
@@ -47,11 +56,25 @@ export function UploadConfirmButton({ uploadFiles, isButtonEnabled }: UploadConf
         アップロードを確定する
       </button>
       <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={modalClose}>
-        <UploadModalHeader modalClose={modalClose} />
-        <UploadModalContent uploadFiles={uploadFiles} />
-        <hr className="mt-2 h-2" />
-        <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
-        <UploadModalFooter modalClose={modalClose} uploadFiles={uploadFiles} commitMessage={commitMessage} />
+        {commitState === "BEFORE" ? (
+          <>
+            <UploadModalContent uploadFiles={uploadFiles} />
+            <hr className="mt-2 h-2" />
+            <UploadModalCommitMessage setCommitMessage={setCommitMessage} />
+            <UploadModalFooterButton
+              modalClose={modalClose}
+              uploadFiles={uploadFiles}
+              commitMessage={commitMessage}
+              setCommitState={setCommitState}
+            />
+          </>
+        ) : commitState === "DURING" ? (
+          <UploadDuringModalContent />
+        ) : commitState === "SUCCESS" ? (
+          <UploadResultModalContent result={"SUCCESS"} />
+        ) : commitState === "FAIL" ? (
+          <UploadResultModalContent result={"FAIL"} />
+        ) : null}
       </Modal>
     </>
   );
