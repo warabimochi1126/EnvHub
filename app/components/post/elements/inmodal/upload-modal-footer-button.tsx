@@ -14,9 +14,10 @@ interface UploadModalFooterButtonProps {
 export function UploadModalFooterButton({ modalClose, uploadFiles, commitMessage, setCommitState }: UploadModalFooterButtonProps) {
   const { selectedRepoData } = useRepoDataStore();
 
-  const confirmUpload = (uploadTargetFiles: File[]) => {
-    const uploadRequestBody = new FormData();
+  const confirmUpload = async (uploadTargetFiles: File[]) => {
+    setCommitState("DURING");
 
+    const uploadRequestBody = new FormData();
     uploadTargetFiles.forEach((uploadTargetFile) => {
       uploadRequestBody.append("upload_target_files", uploadTargetFile);
     });
@@ -25,13 +26,17 @@ export function UploadModalFooterButton({ modalClose, uploadFiles, commitMessage
       repo_id: selectedRepoData.repoId,
       commit_message: commitMessage
     }));
-
-    setCommitState("DURING");
     
-    const response = fetch("/api/uploads/confirm", {
+    const response = await fetch("/api/uploads/confirm", {
       method: "POST",
       body: uploadRequestBody,
     });
+
+    if(response.ok) {
+      setCommitState("SUCCESS");
+    } else {
+      setCommitState("FAIL");
+    }
   }
 
   return (
