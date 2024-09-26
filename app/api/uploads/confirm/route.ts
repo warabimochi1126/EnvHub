@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const uploadTargetFiles = receivedFormData.getAll("upload_target_files") as File[];
 
     if (!isValidMetaData(metaData) || !isValidEnvFileList(uploadTargetFiles)) {
-      throw new Error();
+      throw new Error("バリデーションでエラーが発生しました。");
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       .select()
       .eq("repository_id", metaData.repo_id);
     if (data === null) {
-      throw new Error();
+      throw new Error("repositoryIdに紐づく最新コミットが取得出来ませんでした。");
     }
     if (data.length !== 0) {
       previousCommitUuid = data[0].latest_commit_uuid;
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       updated_at: now,
     });
     if (upsertError) {
-      throw new Error();
+      throw new Error("repository_latest_commitsテーブルに保存出来ませんでした。");
     }
 
     // 一つ前のUUIDが存在すれば -> それを指定, しなければ null
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       previous_commit_uuid: previousCommitUuid ? previousCommitUuid : null,
     });
     if (insertError) {
-      throw new Error();
+      throw new Error("commit_files_historyテーブルに保存出来ませんでした。");
     }
 
     // オブジェクトストレージへの保存は、UUID/ファイル名で保存する
@@ -96,13 +96,18 @@ export async function POST(request: NextRequest) {
       (storageUploadResult) => storageUploadResult.error !== null
     );
     if (hasUploadError) {
-      throw new Error();
+      throw new Error("オブジェクトストレージに保存出来ませんでした。");
     }
-  } catch (e) {
-    return Response.json(
-      { message: "何らかの理由でファイルアップロードが成功しませんでした。" },
-      { status: 500 }
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return Response.json(
+        {
+          message: error.message,
+        },
+        { status: 500 }
+      );
+    }
+    return Response.json({ message: "想定外のエラーによりアップロードが失敗しました。" }, { status: 500 });
   }
 
   return Response.json({ message: "ファイルアップロードに成功しました！" }, { status: 200 });
