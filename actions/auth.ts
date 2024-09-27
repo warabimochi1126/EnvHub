@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+// TODO:RouteHandler側に移動させる
 export const githubSignIn = async (redirectPath: string) => {
   const supabase = createClient();
 

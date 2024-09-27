@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
-    const isAuthorizedRepository = isAuthUserRepository(metaData.repo_id);
+    const isAuthorizedRepository = await isAuthUserRepository(metaData.repo_id);
     if (!isAuthorizedRepository) {
       return Response.json(
         { message: "認証ユーザのが保持していないリポジトリを対象にファイルアップロードは行えません。" },

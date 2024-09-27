@@ -1,6 +1,7 @@
 import { fetchMyRepoNames, fetchOrgsLinkRepoNames } from "@/datas/fetchAuthUserRespositories";
 import { RepositorySelctorArea } from "../components/post/layout/repository-selector-area";
 import { CommitList } from "../components/get/layout/commit-list";
+import { CommitFileList } from "../components/get/layout/commit-file-list";
 
 export default async function Page() {
   const myRepoNames = await fetchMyRepoNames();
@@ -13,6 +14,7 @@ export default async function Page() {
       </div>
       <div className="w-3/4 bg-white">
         <CommitList />
+        <CommitFileList />
       </div>
     </div>
   );

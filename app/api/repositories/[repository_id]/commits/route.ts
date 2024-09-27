@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
-    const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
+    const isAuthorizedRepository = await isAuthUserRepository(Number(repositoryId));
     if (!isAuthorizedRepository) {
       return Response.json(
         { message: "認証ユーザが保持していないリポジトリを対象にコミット一覧は取得出来ません。" },

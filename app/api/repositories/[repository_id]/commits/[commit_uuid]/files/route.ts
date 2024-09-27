@@ -8,22 +8,28 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { repository_id: string; commit_uuid: string } }
 ) {
+  // console.log("requestAllCookies");
+  // console.log(request.cookies.getAll());
+  // const headers = Object.fromEntries(request.headers);
+  // console.log("AllHeaders");
+  // console.log(headers);
   try {
     const supabase = createClient();
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
-
-    if (!isValidStorageDataRequestObject({ repositoryId, commitUuid })) {
+    if (!isValidStorageDataRequestObject({ repositoryId, commitUuid: commitUuid.toLowerCase() })) {
       throw new Error();
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
-    const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
+    const isAuthorizedRepository = await isAuthUserRepository(Number(repositoryId));
     if (!isAuthorizedRepository) {
       return Response.json(
         { message: "認証ユーザのが保持していないリポジトリを対象にファイルアップロードは行えません。" },
         { status: 403 }
       );
     }
+
+    console.log(isAuthorizedRepository);
 
     let targetCommitUuid: string = "";
     if (commitUuid === "latest") {

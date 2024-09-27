@@ -20,15 +20,12 @@ export async function fetchAuthenticatedUserRepositoryNames() {
   }
 
   // リポジトリの個数分やるとAPI側の回数制限に引っかかる可能性があるので最大100個で留めておく
-  const response = await fetch(
-    "https://api.github.com/user/repos?sort=updated&per_page=100",
-    {
-      headers: {
-        Authorization: `Bearer ${providerToken}`,
-      },
-      cache: "no-store",
-    }
-  );
+  const response = await fetch("https://api.github.com/user/repos?sort=updated&per_page=100", {
+    headers: {
+      Authorization: `Bearer ${providerToken}`,
+    },
+    cache: "no-store",
+  });
 
   const fetchRepositoriesData: RepositoryList = await response.json();
   const fetchrepositoriesDataNames = fetchRepositoriesData.map((data) => ({
@@ -46,15 +43,13 @@ export async function getAuthUserProviderToken(): Promise<string> {
 
   const providerToken = data.session?.provider_token;
   if (!providerToken) {
-    redirect("/");
+    throw new Error("providerTokenが取得出来ませんでした。");
   }
 
   return providerToken;
 }
 
-async function fetchAuthUserOrgsNames(
-  providerToken: string
-): Promise<string[]> {
+async function fetchAuthUserOrgsNames(providerToken: string): Promise<string[]> {
   // prettier-ignore
   const response = await fetch("https://api.github.com/user/orgs?per_page=100", {
       headers: {
