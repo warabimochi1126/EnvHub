@@ -72,6 +72,9 @@ export async function POST(request: NextRequest) {
     // 一つ前のIDが存在しない状況 -> 始めてのインサートのタイミング、よってrepository_latest_commitsテーブルの中にrepoIdでリードしても何もない状態の時 -> null
     // 一つ前のIDが存在する状況 -> ２回目以降のインサートのタイミング、よってrepository_latest_commitsテーブルの中にrepoIdでリードすると何かしら存在する状態の時 -> そのIDをprevious_coomit_uuidにする
 
+    const userData = await supabase.auth.getUser();
+    const commiterName = userData.data.user?.user_metadata.user_name;
+
     const uploadTargetFileNames = uploadTargetFiles.map((uploadTargetFiles) => uploadTargetFiles.name);
     const { error: insertError } = await supabase.from("commit_files_history").insert({
       commit_uuid: currentCommitUuid,
@@ -79,6 +82,7 @@ export async function POST(request: NextRequest) {
       commit_message: metaData.commit_message,
       parent_repository_id: metaData.repo_id,
       previous_commit_uuid: previousCommitUuid ? previousCommitUuid : null,
+      commiter_name: commiterName ? commiterName : null,
     });
     if (insertError) {
       throw new Error();

@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
     const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
     if (!isAuthorizedRepository) {
       return Response.json(
-        { message: "認証ユーザのが保持していないリポジトリを対象にファイルアップロードは行えません。" },
+        { message: "認証ユーザが保持していないリポジトリを対象にコミット一覧は取得出来ません。" },
         { status: 403 }
       );
     }
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
     // repositoryIdに紐づいたcommitの情報を返す
     const { data: commitList, error } = await supabase
       .from("commit_files_history")
-      .select("commit_message, created_at")
+      .select("commit_message, commiter_name, created_at")
       .eq("parent_repository_id", repositoryId);
 
     if (commitList === null || error) {
