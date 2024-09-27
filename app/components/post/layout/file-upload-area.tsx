@@ -10,10 +10,17 @@ interface FileUploadAreaProps {
   setDropFiles: Dispatch<SetStateAction<File[]>>;
 }
 
-export function FileUploadArea({
-  dropFiles,
-  setDropFiles,
-}: FileUploadAreaProps) {
+const envFileValidator = (file: File) => {
+  if (!file.name.startsWith(".env")) {
+    return {
+      code: "wrong-file-type",
+      message: "ファイル名は.envで始まる必要があります。",
+    };
+  }
+  return null;
+};
+
+export function FileUploadArea({ dropFiles, setDropFiles }: FileUploadAreaProps) {
   const onDrop = (dropFiles: File[]) => {
     setDropFiles(dropFiles);
   };
@@ -21,6 +28,7 @@ export function FileUploadArea({
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     noClick: true,
+    validator: envFileValidator,
   });
 
   return (
