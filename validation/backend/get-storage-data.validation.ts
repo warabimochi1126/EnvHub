@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// TODO: commitUuidには"latest"と大文字のUUIDv4パターンが存在するが、正しくバリデーション出来ていないので改善が必要
 const getStorageDataRequestSchema = z.object({
   repositoryId: z.string().min(1).regex(/^\d+$/),
   commitUuid: z.union([z.literal("latest"), z.string().min(1).uuid()]),
