@@ -2,7 +2,7 @@
 
 import { convertToJSTFormat } from "@/utils/dateUtils";
 import { fileSizeByteToKB } from "@/utils/fileUtils";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FaFileAlt } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 
@@ -22,10 +22,10 @@ export function FileListItem({ fileName, createdAt, size }: FileListItemProps) {
 
   const download = async () => {
     // prettier-ignore
-    const response = await fetch("http://localhost:3000/api/repositories/786320505/commits/5238861a-8057-49c6-8412-5355426cdd54/files/.env.local");
-    const data = (await response.json()) as SingleDownloadResponse;
+    const response = await fetch("http://localhost:3000/api/repositories/786320505/commits/5238861a-8057-49c6-8412-5355426cdd54/files/download/.env.local");
+    const signedUrlData = (await response.json()) as SingleDownloadResponse;
 
-    router.push(data.signedUrl);
+    router.push(signedUrlData.signedUrl);
   };
 
   return (
