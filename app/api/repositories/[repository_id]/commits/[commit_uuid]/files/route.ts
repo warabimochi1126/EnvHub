@@ -11,13 +11,12 @@ export async function GET(
   try {
     const supabase = createClient();
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
-
-    if (!isValidStorageDataRequestObject({ repositoryId, commitUuid })) {
+    if (!isValidStorageDataRequestObject({ repositoryId, commitUuid: commitUuid.toLowerCase() })) {
       throw new Error();
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
-    const isAuthorizedRepository = isAuthUserRepository(Number(repositoryId));
+    const isAuthorizedRepository = await isAuthUserRepository(Number(repositoryId));
     if (!isAuthorizedRepository) {
       return Response.json(
         { message: "認証ユーザのが保持していないリポジトリを対象にファイルアップロードは行えません。" },
