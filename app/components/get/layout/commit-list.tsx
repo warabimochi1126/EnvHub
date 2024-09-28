@@ -1,8 +1,9 @@
 import { FaCircleDot } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { cookies } from "next/headers";
+import { fetchWithCookies } from "@/utils/apiUtils";
 
-interface CommitListResopnse {
+interface CommitListResponse {
   commit_list: {
     commit_message: string;
     commiter_name: string;
@@ -11,14 +12,12 @@ interface CommitListResopnse {
 }
 
 export async function CommitList() {
-  // TODO:明示的にcookieを渡す必要がありそう
   const cookieStore = cookies();
-  const allCookies = cookieStore.getAll();
-  console.log("allCookies");
-  console.log(allCookies);
+  const cookieArray = cookieStore.getAll();
   // TODO:URL部分汎用化したい
-  const response = await fetch("http://localhost:3000/api/repositories/786320505/commits");
-  const { commit_list: commitList } = (await response.json()) as CommitListResopnse;
+  // prettier-ignore
+  const response = await fetchWithCookies("http://localhost:3000/api/repositories/786320505/commits", cookieArray);
+  const { commit_list: commitList } = (await response.json()) as CommitListResponse;
 
   return (
     <>

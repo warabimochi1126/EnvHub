@@ -8,11 +8,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { repository_id: string; commit_uuid: string } }
 ) {
-  // console.log("requestAllCookies");
-  // console.log(request.cookies.getAll());
-  // const headers = Object.fromEntries(request.headers);
-  // console.log("AllHeaders");
-  // console.log(headers);
   try {
     const supabase = createClient();
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
@@ -28,8 +23,6 @@ export async function GET(
         { status: 403 }
       );
     }
-
-    console.log(isAuthorizedRepository);
 
     let targetCommitUuid: string = "";
     if (commitUuid === "latest") {

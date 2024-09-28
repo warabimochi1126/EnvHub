@@ -11,7 +11,8 @@ export async function middleware(request: NextRequest) {
   if (
     !isLoggedIn &&
     (accessedPath.startsWith("/share/get") ||
-      accessedPath.startsWith("/share/post"))
+      accessedPath.startsWith("/share/post") ||
+      accessedPath.startsWith("/repository"))
   ) {
     // 時間経過によるprovider_tokenの失効を永続化させる
     await updateSession(request);
