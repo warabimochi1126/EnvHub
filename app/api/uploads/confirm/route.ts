@@ -104,12 +104,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     if (error instanceof Error) {
-      return Response.json(
-        {
-          message: error.message,
-        },
-        { status: 500 }
-      );
+      return Response.json({ message: error.message }, { status: 500 });
     }
     return Response.json({ message: "想定外のエラーによりアップロードが失敗しました。" }, { status: 500 });
   }
