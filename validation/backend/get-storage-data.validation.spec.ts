@@ -38,6 +38,12 @@ describe("isValidStorageDataRequestObject", () => {
   });
 
   describe("commitUuidに", () => {
+    test("latestが渡される時、trueを返すこと", () => {
+      const result = isValidStorageDataRequestObject(craeteRequestObject({ commitUuid: "latest" }));
+
+      expect(result).toBe(true);
+    });
+
     test("文字列以外の値が渡される時、falseを返すこと", () => {
       const result = isValidStorageDataRequestObject(
         craeteRequestObject({ commitUuid: 123 } as unknown as GetStorageDataRequest)
