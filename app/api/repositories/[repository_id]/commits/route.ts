@@ -11,7 +11,7 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
     const repositoryId = params.repository_id;
 
     if (!isValidRepositoryId(repositoryId)) {
-      throw new Error();
+      throw new Error("バリデーションでエラーが発生しました。");
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
@@ -30,11 +30,14 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
       .eq("parent_repository_id", repositoryId);
 
     if (commitList === null || error) {
-      throw new Error();
+      throw new Error("commit_files_historyからデータを取得出来ませんでした。");
     }
 
     return Response.json({ commit_list: commitList }, { status: 200 });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      return Response.json({ message: error.message }, { status: 500 });
+    }
     return Response.json({ message: "コミット一覧が取得出来ませんでした。" }, { status: 500 });
   }
 }

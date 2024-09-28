@@ -12,7 +12,7 @@ export async function GET(
     const supabase = createClient();
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
     if (!isValidStorageDataRequestObject({ repositoryId, commitUuid: commitUuid.toLowerCase() })) {
-      throw new Error();
+      throw new Error("バリデーションでエラーが発生しました。");
     }
 
     // 紐づけリポジトリを本人が保持しているかの確認
@@ -33,7 +33,7 @@ export async function GET(
         .single();
 
       if (latestCommitData === null || latestCommitError) {
-        throw new Error();
+        throw new Error("repository_latest_commitsテーブルからデータを取得出来ませんでした。");
       }
 
       targetCommitUuid = latestCommitData.latest_commit_uuid;
@@ -48,7 +48,7 @@ export async function GET(
       .single();
 
     if (fileNames === null || commitFilesHistoryError) {
-      throw new Error();
+      throw new Error("commit_files_historyテーブルからデータを取得出来ませんでした。");
     }
 
     const { data: storageData, error: storageError } = await supabase.storage
@@ -56,12 +56,15 @@ export async function GET(
       .list(`${repositoryId}/${targetCommitUuid}`);
 
     if (storageError) {
-      throw new Error();
+      throw new Error("オブジェクトストレージに保存出来ませんでした。");
     }
 
     // TODO:返すデータを精査する
     return Response.json(storageData, { status: 200 });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error) {
+      return Response.json({ message: error.message }, { status: 500 });
+    }
     return Response.json({ message: "何らかの理由でファイル取得が成功しませんでした。" }, { status: 500 });
   }
 }
