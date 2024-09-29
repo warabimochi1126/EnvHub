@@ -40,7 +40,6 @@ export async function GET(
     }
 
     targetCommitUuid = targetCommitUuid ? targetCommitUuid : commitUuid;
-    // TODO:取得処理は正しいが、保存上手くいってなさそうなので、保存側を修正する
     const { data: fileNames, error: commitFilesHistoryError } = await supabase
       .from("commit_files_history")
       .select("file_names")

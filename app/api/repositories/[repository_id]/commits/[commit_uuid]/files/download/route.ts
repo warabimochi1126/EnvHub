@@ -10,12 +10,10 @@ export async function GET(
   try {
     const supabase = createClient();
 
-    // TODO: バリデーションの実装
     const { repository_id: repositoryId, commit_uuid: commitUuid } = params;
     if (!isValidCommitFilesDownloadRequestObject({ repositoryId, commitUuid: commitUuid.toLowerCase() })) {
       throw new Error("バリデーションでエラーが発生しました。");
     }
-    // TODO:該当リポジトリを認証ユーザが保持しているかチェックする
     const isAuthorizedRepository = await isAuthUserRepository(Number(repositoryId));
     if (!isAuthorizedRepository) {
       return Response.json(
@@ -24,8 +22,6 @@ export async function GET(
       );
     }
 
-    // TODO:コミットに紐づく全てのファイル群をダウンロードする署名付きURLの生成
-    // commitUuidでcommit_file_historyからfile_names引っ張ってくる、repoId/commitUuid/file_namesの配列で全部引っ張る
     const { data: commitFileHistory, error: commitFileHistoryError } = await supabase
       .from("commit_files_history")
       .select("file_names")
@@ -35,7 +31,6 @@ export async function GET(
       throw new Error("コミットに紐づくファイル群を取得出来ませんでした。");
     }
 
-    // commit_file_history.file_namesをrepositoryId/commitUuid/file_names[i]の状態にする
     const formattedFilePaths = commitFileHistory[0].file_names.map(
       (fileName) => `${repositoryId}/${commitUuid}/${fileName}`
     );
@@ -43,7 +38,6 @@ export async function GET(
     const { data: signedUrlsData, error: signedUrlsError } = await supabase.storage
       .from("envHub_storage")
       .createSignedUrls(formattedFilePaths, 30);
-    // TODO:レスポンスを返す
     if (!signedUrlsData || signedUrlsError) {
       throw new Error("署名付きURLの生成に失敗しました。");
     }

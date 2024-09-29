@@ -8,6 +8,7 @@ import { CommitNotFound } from "./commit-not-found";
 
 interface CommitListResponse {
   commit_list: {
+    commit_uuid: string;
     commit_message: string;
     commiter_name: string;
     created_at: string;
@@ -15,6 +16,7 @@ interface CommitListResponse {
 }
 
 interface CommitListItem {
+  commit_uuid: string;
   commit_message: string;
   commiter_name: string;
   created_at: string;
@@ -29,10 +31,11 @@ export function CommitListDataFetcher() {
   const { selectedRepoData } = useRepoDataStore();
   useEffect(() => {
     (async () => {
+      if (!selectedRepoData.repoId) return null;
+
       setIsLoading(true);
       // prettier-ignore
       const response = await fetch(`http://localhost:3000/api/repositories/${selectedRepoData.repoId}/commits`);
-
       if (!response.ok) {
         setCommitList([]);
         setIsLoading(false);
@@ -40,7 +43,6 @@ export function CommitListDataFetcher() {
       }
 
       const { commit_list: commitList } = (await response.json()) as CommitListResponse;
-
       if (!commitList) {
         setCommitList([]);
         setIsLoading(false);
@@ -60,6 +62,7 @@ export function CommitListDataFetcher() {
         commitList.map((commit, index) => (
           <div key={index} className="h-[86px] mx-5 rounded-lg">
             <CommitListItem
+              commit_uuid={commit.commit_uuid}
               commit_message={commit.commit_message}
               commiter_name={commit.commiter_name}
               created_at={commit.created_at}

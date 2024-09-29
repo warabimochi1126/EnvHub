@@ -6,7 +6,7 @@ export function CommitFileListHeader() {
     <div className="flex justify-between">
       <div className="flex items-center p-3">
         <VscGitPullRequestNewChanges size={25} className="mr-2 text-blue-500" />
-        <p className="font-bold text-xl">最新のコミットファイル</p>
+        <p className="font-bold text-xl">コミットに紐づくファイル</p>
       </div>
       <BulkDownloadButton />
     </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useCommitDataStore } from "@/store/repositoryGlobalState";
 import { RiDownloadCloud2Line } from "react-icons/ri";
 
 interface BulkDownloadResponse {
@@ -10,9 +11,11 @@ interface BulkDownloadResponse {
 }
 
 export function BulkDownloadButton() {
+  const { selectedCommitData } = useCommitDataStore();
+
   const bulkDownload = async () => {
     // prettier-ignore
-    const response = await fetch("http://localhost:3000/api/repositories/786320505/commits/ab86e284-8ef4-4ba5-838e-36fda3a7e2c6/files/download");
+    const response = await fetch(`http://localhost:3000/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files/download`);
     const signedUrlsData = (await response.json()) as BulkDownloadResponse[];
 
     await Promise.all(
@@ -31,8 +34,10 @@ export function BulkDownloadButton() {
 
   return (
     <button
-      className="flex items-center m-3 border border-gray-300 py-1 px-2 rounded-md hover:bg-gray-400 transition-colors duration-300"
-      onClick={() => bulkDownload()}
+      className={`flex items-center m-3 border border-gray-300 py-1 px-2 rounded-md hover:bg-gray-400 transition-colors duration-300 ${
+        selectedCommitData.commitUuid ? "" : "cursor-not-allowed"
+      }`}
+      onClick={selectedCommitData.commitUuid ? () => bulkDownload() : undefined}
     >
       <RiDownloadCloud2Line size={20} className="text-blue-500 mr-1" />
       <span className="text-sm">一括ダウンロード</span>
