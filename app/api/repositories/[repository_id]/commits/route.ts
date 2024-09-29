@@ -26,8 +26,9 @@ export async function GET(request: NextRequest, { params }: { params: { reposito
     // repositoryIdに紐づいたcommitの情報を返す
     const { data: commitList, error } = await supabase
       .from("commit_files_history")
-      .select("commit_message, commiter_name, created_at")
-      .eq("parent_repository_id", repositoryId);
+      .select("commit_uuid, commit_message, commiter_name, created_at")
+      .eq("parent_repository_id", repositoryId)
+      .order("created_at", { ascending: false });
 
     if (commitList === null || error) {
       throw new Error("commit_files_historyからデータを取得出来ませんでした。");

@@ -1,6 +1,5 @@
 import { isValidEnvFileList, isValidMetaData, MetaData } from "./file-upload.validation";
 
-// TODO:テストしたい関数を親になるdescribeブロックで宣言する
 describe("isValidEnvFileList", () => {
   describe("引数にFileの配列でないものが渡る時", () => {
     test("falseを返すこと", () => {

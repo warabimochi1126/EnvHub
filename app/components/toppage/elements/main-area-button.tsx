@@ -36,15 +36,9 @@ interface MainAreaButtonProps {
   text: string;
 }
 
-export function MainAreaButton({
-  redirectPath,
-  theme,
-  Icon,
-  text,
-}: MainAreaButtonProps) {
+export function MainAreaButton({ redirectPath, theme, Icon, text }: MainAreaButtonProps) {
   const { isModalOpen, modalOpen, modalClose } = useModal();
   const [clickedButtonText, setClickedButtonText] = useState<string>();
-  // TODO:useRouterを使わない方法がないか再考する
   const router = useRouter();
 
   const bgColor =
@@ -78,19 +72,10 @@ export function MainAreaButton({
       >
         <Icon size={20} className="mr-2" />
         <span className="mr-1">{text}</span>
-        {clickedButtonText === text && (
-          <ClipLoader size={15} color="skyblue" speedMultiplier={0.5} />
-        )}
+        {clickedButtonText === text && <ClipLoader size={15} color="skyblue" speedMultiplier={0.5} />}
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        style={modalStyle}
-        onRequestClose={modalClose}
-      >
-        <MainInModalContent
-          modalCloseFunc={modalClose}
-          redirectPath={redirectPath}
-        />
+      <Modal isOpen={isModalOpen} style={modalStyle} onRequestClose={modalClose}>
+        <MainInModalContent modalCloseFunc={modalClose} redirectPath={redirectPath} />
       </Modal>
     </>
   );

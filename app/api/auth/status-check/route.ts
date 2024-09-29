@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
   const supabase = createClient();
 
   const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
-  // TODO:場当たり的な解決策
   const { data } = await supabase.auth.getSession();
   const providerToken = data.session?.provider_token!;
 
@@ -18,8 +17,7 @@ export async function POST(request: NextRequest) {
     } catch (e: any) {
       return NextResponse.json(
         {
-          message:
-            "bodyが存在しないか、正しいリダイレクト先ではありませんでした。",
+          message: "bodyが存在しないか、正しいリダイレクト先ではありませんでした。",
         },
         { status: 400 }
       );

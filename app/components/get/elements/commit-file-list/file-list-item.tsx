@@ -1,5 +1,6 @@
 "use client";
 
+import { useCommitDataStore } from "@/store/repositoryGlobalState";
 import { convertToJSTFormat } from "@/utils/dateUtils";
 import { fileSizeByteToKB } from "@/utils/fileUtils";
 import { useRouter } from "next/navigation";
@@ -19,10 +20,11 @@ interface SingleDownloadResponse {
 // TODO:後で横揃えて大きさ合わせる
 export function FileListItem({ fileName, createdAt, size }: FileListItemProps) {
   const router = useRouter();
+  const { selectedCommitData } = useCommitDataStore();
 
   const download = async () => {
     // prettier-ignore
-    const response = await fetch("http://localhost:3000/api/repositories/786320505/commits/5238861a-8057-49c6-8412-5355426cdd54/files/download/.env.local");
+    const response = await fetch(`http://localhost:3000/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files/download/${fileName}`);
     const signedUrlData = (await response.json()) as SingleDownloadResponse;
 
     router.push(signedUrlData.signedUrl);
