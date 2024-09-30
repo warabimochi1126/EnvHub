@@ -55,14 +55,16 @@ export function CommitFileList() {
       {isLoading ? (
         <CommitFileListLoader />
       ) : (
-        commitFileList.map((commitFile, index) => (
-          <FileListItem
-            key={index}
-            fileName={commitFile.name}
-            size={commitFile.metadata.size}
-            createdAt={commitFile.created_at}
-          />
-        ))
+        <div className="flex">
+          {commitFileList.map((commitFile, index) => (
+            <FileListItem
+              key={index}
+              fileName={commitFile.name}
+              size={commitFile.metadata.size}
+              createdAt={commitFile.created_at}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
