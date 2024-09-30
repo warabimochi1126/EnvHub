@@ -50,12 +50,12 @@ export function CommitFileList() {
   }, [selectedCommitData.repoId, selectedCommitData.commitUuid]);
 
   return (
-    <div className="w-11/12 h-80 mt-5 mx-auto border border-black rounded-lg">
+    <div className="w-11/12 h-80 mt-5 mx-auto border border-black rounded-lg overflow-y-scroll scrollbar">
       <CommitFileListHeader />
       {isLoading ? (
         <CommitFileListLoader />
       ) : (
-        <div className="flex">
+        <div className="flex flex-wrap m-10">
           {commitFileList.map((commitFile, index) => (
             <FileListItem
               key={index}
