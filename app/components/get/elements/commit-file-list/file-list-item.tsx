@@ -37,7 +37,7 @@ function getEnvFileIconColor(fileName: string): string {
     case ".env.example":
       return "text-gray-500";
     default:
-      return "text-emerald-700"; // その他の .env ファイル
+      return "text-emerald-700";
   }
 }
 
