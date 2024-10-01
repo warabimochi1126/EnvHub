@@ -50,19 +50,21 @@ export function CommitFileList() {
   }, [selectedCommitData.repoId, selectedCommitData.commitUuid]);
 
   return (
-    <div className="w-11/12 h-80 mt-5 mx-auto border border-black rounded-lg">
+    <div className="w-11/12 mt-5 h-80 mx-auto border border-black rounded-lg overflow-y-scroll scrollbar">
       <CommitFileListHeader />
       {isLoading ? (
         <CommitFileListLoader />
       ) : (
-        commitFileList.map((commitFile, index) => (
-          <FileListItem
-            key={index}
-            fileName={commitFile.name}
-            size={commitFile.metadata.size}
-            createdAt={commitFile.created_at}
-          />
-        ))
+        <div className="flex flex-wrap mx-10 my-3">
+          {commitFileList.map((commitFile, index) => (
+            <FileListItem
+              key={index}
+              fileName={commitFile.name}
+              size={commitFile.metadata.size}
+              createdAt={commitFile.created_at}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
