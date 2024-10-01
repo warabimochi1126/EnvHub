@@ -54,7 +54,6 @@ export function FileListItem({ fileName, createdAt, size }: FileListItemProps) {
   };
 
   const iconColor = getEnvFileIconColor(fileName);
-  console.log(iconColor);
 
   return (
     <div className="flex items-center w-1/3 px-5 py-3 justify-between">
