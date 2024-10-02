@@ -11,7 +11,7 @@ interface RepoNameSearchBar {
 // prettier-ignore
 export function RepoNameSearchBar({ searchQuery, setSearchQuery }: RepoNameSearchBar) {
   return (
-    <div className="relative w-11/12 mx-auto">
+    <div className="relative w-11/12 mx-auto my-4">
       <TbZoom className="absolute left-3 top-[11px]" size={20} />
       <input
         className="w-full flex items-center border py-2 px-10 rounded"

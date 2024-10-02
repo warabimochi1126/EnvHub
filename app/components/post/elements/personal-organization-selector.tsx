@@ -15,7 +15,7 @@ export function PersonalOrganizationSelctor({
   clickOrganizations,
 }: PersonalOrganizationSelctorProps) {
   return (
-    <div className="w-11/12 bg-gray-100 mx-auto p-1 rounded-sm flex">
+    <div className="w-11/12 bg-gray-100 mx-auto my-3 p-1 rounded-md flex">
       <PersonalRepositoryTypeButton
         isPersonalClicked={isPersonalClicked}
         clickPersonal={clickPersonal}
