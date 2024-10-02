@@ -19,8 +19,8 @@ export function RepoSelectButton({ repoName, repoId }: RepoSelectButtonProps) {
 
   return (
     <div
-      className={`w-11/12 mx-auto border rounded p-2 flex items-center text-sm ${
-        selectedRepoData.repoId === repoId && "bg-black"
+      className={`w-11/12 mx-auto my-1 rounded p-2 flex items-center text-sm hover:bg-gray-300 transition-colors ${
+        selectedRepoData.repoId === repoId && "bg-gray-300"
       }`}
       onClick={() => handleRepoSelect()}
     >
