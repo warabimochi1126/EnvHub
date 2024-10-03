@@ -8,13 +8,9 @@ interface UploadPreviewFileContentProps {
   setDropFiles: Dispatch<SetStateAction<File[]>>;
 }
 
-export function UploadPreviewFileContent({
-  dropFile,
-  index,
-  setDropFiles,
-}: UploadPreviewFileContentProps) {
+export function UploadPreviewFileContent({ dropFile, index, setDropFiles }: UploadPreviewFileContentProps) {
   return (
-    <div key={dropFile.name} className="border flex p-3 justify-between">
+    <div key={dropFile.name} className="border-b flex p-3 justify-between">
       <div className="flex items-center">
         <FaRegFile size={20} className="mr-3" />
         <span className="text-sm">{dropFile.name}</span>
@@ -22,7 +18,7 @@ export function UploadPreviewFileContent({
       <AiOutlineClose
         size={20}
         className="hover:bg-gray-300 rounded-full transition-colors duration-500"
-        onClick={() => setDropFiles((prev) => prev.splice(index, 1))}
+        onClick={() => setDropFiles((prev) => prev.filter((_, i) => i !== index))}
       />
     </div>
   );
