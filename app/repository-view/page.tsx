@@ -8,10 +8,10 @@ export default async function Page() {
 
   return (
     <div className="flex">
-      <div className="w-1/4 bg-white h-screen border-r border-black overflow-y-scroll scrollbar">
+      <div className="w-1/4 bg-white h-screen border-r overflow-y-scroll scrollbar">
         <RepositorySelctorArea myRepoNames={myRepoNames} orgLinkRepoNames={orgLinkRepoNames} />
       </div>
-      <div className="w-3/4 bg-white">
+      <div className="w-3/4 bg-gray-100">
         <DropEnvArea />
       </div>
     </div>

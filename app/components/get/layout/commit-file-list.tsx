@@ -50,7 +50,7 @@ export function CommitFileList() {
   }, [selectedCommitData.repoId, selectedCommitData.commitUuid]);
 
   return (
-    <div className="w-11/12 mt-5 h-80 mx-auto border border-black rounded-lg overflow-y-scroll scrollbar">
+    <div className="w-11/12 mt-16 h-80 mx-auto border bg-white rounded-lg overflow-y-scroll scrollbar">
       <CommitFileListHeader />
       {isLoading ? (
         <CommitFileListLoader />
