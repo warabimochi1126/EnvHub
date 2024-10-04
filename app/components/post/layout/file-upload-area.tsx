@@ -33,7 +33,7 @@ export function FileUploadArea({ dropFiles, setDropFiles }: FileUploadAreaProps)
 
   return (
     <div
-      className="border-2 border-dashed hover:border-gray-400 hover:bg-gray-200 transition-colors duration-500 rounded-xl mx-auto w-11/12 h-80 flex justify-center items-center"
+      className="border-2 border-dashed hover:border-gray-400 hover:bg-gray-200 transition-colors duration-500 rounded-xl mx-auto w-11/12 h-80 flex justify-center items-center bg-white"
       {...getRootProps()}
     >
       <input {...getInputProps()} />

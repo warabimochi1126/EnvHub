@@ -16,7 +16,7 @@ export function FileUploadPreviewArea({ dropFiles, setDropFiles }: FileUploadPre
   const { selectedRepoData } = useRepoDataStore();
 
   return (
-    <div className="w-11/12 mx-auto my-10 border-2 rounded-lg p-4 scrollbar overflow-y-scroll max-h-[480px]">
+    <div className="w-11/12 mx-auto my-10 border-2 rounded-lg p-4 scrollbar overflow-y-scroll max-h-[480px] bg-white">
       <p className="font-bold mb-2">アップロード中のファイル:</p>
       {dropFiles.length === 0 ? (
         <p>アップロード中のファイルはありません。</p>
