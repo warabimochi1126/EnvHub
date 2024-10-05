@@ -6,6 +6,8 @@ import { ImageInSlider } from "../elements/image-in-slider";
 
 import EnvHubImage1 from "@/public/envhub_1.png";
 import EnvHubImage2 from "@/public/envhub_2.png";
+import EnvHubV2Image1 from "@/public/envhubv2_1.png";
+import EnvHubV2Image2 from "@/public/envhubv2_2.png";
 
 import "react-splide-ts/css/sea-green";
 
@@ -28,6 +30,12 @@ export function ImageSliderArea() {
           </SplideSlide>
           <SplideSlide>
             <ImageInSlider ImageSrc={EnvHubImage2} />
+          </SplideSlide>
+          <SplideSlide>
+            <ImageInSlider ImageSrc={EnvHubV2Image1} />
+          </SplideSlide>
+          <SplideSlide>
+            <ImageInSlider ImageSrc={EnvHubV2Image2} />
           </SplideSlide>
         </SplideTrack>
         <SplideProgressBar />
