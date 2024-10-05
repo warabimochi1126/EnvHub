@@ -6,13 +6,10 @@ interface AfterUploadDropZoneContentProps {
   dropFiles: File[];
 }
 
-export function AfterUploadDropZoneContent({
-  open,
-  dropFiles,
-}: AfterUploadDropZoneContentProps) {
+export function AfterUploadDropZoneContent({ open, dropFiles }: AfterUploadDropZoneContentProps) {
   return (
     <>
-      <LiaCheckCircle size={40} color="skyblue" />
+      <LiaCheckCircle size={40} className="text-green-300" />
       {dropFiles.length >= 2 ? (
         <span>
           {dropFiles[0].name} ...他{dropFiles.length - 1}件
