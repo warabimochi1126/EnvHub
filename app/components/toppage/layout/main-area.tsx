@@ -15,18 +15,8 @@ export function MainArea() {
         </p>
 
         <div className="flex justify-center space-x-12 mt-6">
-          <MainAreaButton
-            redirectPath={"/share/post"}
-            theme="blue"
-            Icon={FiUpload}
-            text="Share.env"
-          />
-          <MainAreaButton
-            redirectPath={"/share/get"}
-            theme="gray"
-            Icon={FiDownload}
-            text="Get.env"
-          />
+          <MainAreaButton redirectPath={"/share"} theme="blue" Icon={FiUpload} text="Share.env" />
+          <MainAreaButton redirectPath={"/get"} theme="gray" Icon={FiDownload} text="Get.env" />
           <DisclaimerButton />
         </div>
       </div>
