@@ -35,7 +35,10 @@ export function CommitListDataFetcher() {
 
       setIsLoading(true);
       // prettier-ignore
-      const response = await fetch(`http://localhost:3000/api/repositories/${selectedRepoData.repoId}/commits`);
+      console.log()
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/repositories/${selectedRepoData.repoId}/commits`
+      );
       if (!response.ok) {
         setCommitList([]);
         setIsLoading(false);

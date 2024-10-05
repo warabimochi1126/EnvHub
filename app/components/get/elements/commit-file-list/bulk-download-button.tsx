@@ -15,7 +15,7 @@ export function BulkDownloadButton() {
 
   const bulkDownload = async () => {
     // prettier-ignore
-    const response = await fetch(`http://localhost:3000/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files/download`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files/download`);
     const signedUrlsData = (await response.json()) as BulkDownloadResponse[];
 
     await Promise.all(

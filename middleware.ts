@@ -8,12 +8,7 @@ export async function middleware(request: NextRequest) {
   const isLoggedIn = !!(await supabase.auth.getUser()).data.user;
   const accessedPath = request.nextUrl.pathname;
 
-  if (
-    !isLoggedIn &&
-    (accessedPath.startsWith("/share/get") ||
-      accessedPath.startsWith("/share/post") ||
-      accessedPath.startsWith("/repository"))
-  ) {
+  if (!isLoggedIn && (accessedPath.startsWith("/get") || accessedPath.startsWith("/share"))) {
     // 時間経過によるprovider_tokenの失効を永続化させる
     await updateSession(request);
 
