@@ -29,7 +29,7 @@ export function CommitFileList() {
       setIsLoading(true);
 
       const response = await fetch(
-        `http://localhost:3000/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files`
+        `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/repositories/${selectedCommitData.repoId}/commits/${selectedCommitData.commitUuid}/files`
       );
       if (!response.ok) {
         setCommitFileList([]);
