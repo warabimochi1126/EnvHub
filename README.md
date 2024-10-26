@@ -21,3 +21,9 @@
 ## V2 からの方針
 
 - PR タイトルが Conventional Commits に沿うようにする
+
+## V3 やること
+
+- [] EnvHub_cli の開発
+- [] supabase から脱却する
+- [] バックエンド実装のリファクタリング(関心の分離)
