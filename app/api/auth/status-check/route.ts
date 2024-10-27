@@ -14,13 +14,8 @@ export async function POST(request: NextRequest) {
     let redirectPath;
     try {
       redirectPath = await request.json();
-    } catch (e: any) {
-      return NextResponse.json(
-        {
-          message: "bodyが存在しないか、正しいリダイレクト先ではありませんでした。",
-        },
-        { status: 400 }
-      );
+    } catch (e) {
+      return createErrorResponse("bodyが存在しないか、正しいリダイレクト先ではありませんでした。", 400);
     }
 
     if (redirectPath) {
@@ -31,28 +26,18 @@ export async function POST(request: NextRequest) {
           },
           { status: 200 }
         );
-      } catch (e: any) {
-        return NextResponse.json(
-          {
-            message: "正しいリダイレクト先を指定してください。",
-          },
-          { status: 400 }
-        );
+      } catch (e) {
+        return createErrorResponse("正しいリダイレクト先を指定してください。", 400);
       }
     } else {
-      return NextResponse.json(
-        {
-          message: "リダイレクト先を送信してください。",
-        },
-        { status: 400 }
-      );
+      return createErrorResponse("リダイレクト先を送信してください。", 400);
     }
   } else {
-    return NextResponse.json(
-      {
-        message: "ログイン状態を取得出来ませんでした。",
-      },
-      { status: 401 }
-    );
+    return createErrorResponse("ログイン状態を取得出来ませんでした。", 401);
   }
+}
+
+// エラーレスポンス作成用
+function createErrorResponse(message: string, statusCode: number) {
+  return NextResponse.json({ message }, { status: statusCode });
 }
