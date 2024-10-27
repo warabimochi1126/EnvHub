@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
-// TODO:try-catchでエラーハンドリングしたら見通しが悪くなったのでリファクタリングする
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
@@ -11,48 +10,33 @@ export async function POST(request: NextRequest) {
 
   const accessOrigin = request.nextUrl.origin;
   if (isLoggedIn && providerToken) {
-    let redirectPath;
+    let response;
     try {
-      redirectPath = await request.json();
-    } catch (e: any) {
-      return NextResponse.json(
-        {
-          message: "bodyが存在しないか、正しいリダイレクト先ではありませんでした。",
-        },
-        { status: 400 }
-      );
+      response = (await request.json()) as { redirectPath: string };
+    } catch (e) {
+      return createErrorResponse("bodyが存在しないか、正しいリダイレクト先ではありませんでした。", 400);
     }
 
-    if (redirectPath) {
+    if (response.redirectPath) {
       try {
         return NextResponse.json(
           {
-            redirectUrl: new URL(redirectPath, accessOrigin),
+            redirectUrl: new URL(response.redirectPath, accessOrigin),
           },
           { status: 200 }
         );
-      } catch (e: any) {
-        return NextResponse.json(
-          {
-            message: "正しいリダイレクト先を指定してください。",
-          },
-          { status: 400 }
-        );
+      } catch (e) {
+        return createErrorResponse("正しいリダイレクト先を指定してください。", 400);
       }
     } else {
-      return NextResponse.json(
-        {
-          message: "リダイレクト先を送信してください。",
-        },
-        { status: 400 }
-      );
+      return createErrorResponse("リダイレクト先を送信してください。", 400);
     }
   } else {
-    return NextResponse.json(
-      {
-        message: "ログイン状態を取得出来ませんでした。",
-      },
-      { status: 401 }
-    );
+    return createErrorResponse("ログイン状態を取得出来ませんでした。", 401);
   }
+}
+
+// エラーレスポンス作成用
+function createErrorResponse(message: string, statusCode: number) {
+  return NextResponse.json({ message }, { status: statusCode });
 }
