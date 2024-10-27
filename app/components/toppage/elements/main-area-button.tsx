@@ -51,7 +51,7 @@ export function MainAreaButton({ redirectPath, theme, Icon, text }: MainAreaButt
 
     const response = await fetch("/api/auth/status-check", {
       method: "POST",
-      body: JSON.stringify(redirectPath),
+      body: JSON.stringify({ redirectPath }),
     });
 
     if (!response.ok) {

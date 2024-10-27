@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
-// TODO:try-catchでエラーハンドリングしたら見通しが悪くなったのでリファクタリングする
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
@@ -11,18 +10,18 @@ export async function POST(request: NextRequest) {
 
   const accessOrigin = request.nextUrl.origin;
   if (isLoggedIn && providerToken) {
-    let redirectPath;
+    let response;
     try {
-      redirectPath = await request.json();
+      response = (await request.json()) as { redirectPath: string };
     } catch (e) {
       return createErrorResponse("bodyが存在しないか、正しいリダイレクト先ではありませんでした。", 400);
     }
 
-    if (redirectPath) {
+    if (response.redirectPath) {
       try {
         return NextResponse.json(
           {
-            redirectUrl: new URL(redirectPath, accessOrigin),
+            redirectUrl: new URL(response.redirectPath, accessOrigin),
           },
           { status: 200 }
         );
